@@ -6,6 +6,7 @@
 //  Created by Roman Efimov on 6/10/2010.
 //
 
+
 class STAutoload extends STObject {
     
     final private function __construct() {}
