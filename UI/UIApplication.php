@@ -176,4 +176,8 @@ function UIApplicationSetLocation($location = '') {
 	UIApplication::sharedApplication()->location = $location;
 }
 
+function UIApplicationRefreshLocation() {
+	UIApplicationSetLocation(UIApplicationLocation());
+}
+
 ?>

@@ -16,6 +16,11 @@ class STCSV extends STObject {
         $this->config['return'] = $return;
         return $this;
     }
+    
+    public function sendHeaders($filename) {
+            header("Content-type: text/csv");
+            header("Content-disposition:  attachment; filename=".$filename);
+        }
         
     public function arrayToCsvString($array) {
         if (!$array) throw new Exception("Array shouldn't be empty");

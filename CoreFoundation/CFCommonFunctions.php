@@ -135,6 +135,10 @@ function CFGetPageLimit($limit, $page) {
     return $page;
 }
 
+function CFFileExtension($fileName) {
+    return substr($fileName, strrpos($fileName, '.') + 1);
+}
+
 function array_split($array) {           
     $end=count($array);
     $half = ($end % 2 )?  ceil($end/2): $end/2;

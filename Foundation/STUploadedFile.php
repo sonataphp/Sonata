@@ -10,6 +10,7 @@ class STUploadedFile {
 	public $file, $name, $type, $size, $path, $error;
 
 	public function __construct($f){
+		$f = $_FILES[$f];
 		$this->file = $f;
 		$this->name = $f['name'];
 		$this->type = $f['type'];
