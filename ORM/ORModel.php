@@ -10,7 +10,7 @@ class ORQueryHelper {
     private static $increment;
     
     public static function escape($v) {
-        return mysql_real_escape_string($v);
+        return DB::escape($v);
     }
     
     public static function setupReplace($params) {

@@ -9,6 +9,8 @@
 include "Headers/UIApplicationSettings.php";
 include "Headers/UIApplicationDelegate.php";
 
+if (!defined("UIApplication404Header")) define("UIApplication404Header", "HTTP/1.0 404 Not Found");
+
 class UIApplication extends STObject implements UIApplicationDelegate {
     
     private static $delegate = null;
@@ -85,6 +87,10 @@ class UIApplication extends STObject implements UIApplicationDelegate {
 	
 	public function forceUsingSSL() {
 		$this->isSSL = true;
+	}
+	
+	public function sendHeader($header) {
+		header($header);
 	}
     
     public function settingsFromObject($data) {

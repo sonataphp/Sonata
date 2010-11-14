@@ -23,6 +23,15 @@ class UIViewParser {
                 $result = self::$delegate->view->title;
                 break;
             
+            case "{{pageTitle}}":
+                $result = self::$delegate->view->title;
+                break;
+            
+            case "{{favicon}}":     
+                $result = '<link rel="icon" href="'.UIApplication::sharedApplication()->settings->iconFile.'" type="image/x-icon" />'."\r\n".
+                          '<link rel="shortcut icon" href="'.UIApplication::sharedApplication()->settings->iconFile.'" type="image/x-icon" />';
+                break;
+            
             case "{{applicationTitle}}":
                 $result = UIApplicationTitle();
                 break;
