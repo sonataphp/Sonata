@@ -1,17 +1,27 @@
 <?
-//
 //  UIApplication.php
 //  Sonata/UI
 //
-//  Created by Roman Efimov on 6/10/2010.
+// Copyright 2010 Roman Efimov <romefimov@gmail.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
-include "Headers/UIApplicationSettings.php";
-include "Headers/UIApplicationDelegate.php";
+require_once "Headers/UIApplicationSettings.php";
 
 if (!defined("UIApplication404Header")) define("UIApplication404Header", "HTTP/1.0 404 Not Found");
 
-class UIApplication extends STObject implements UIApplicationDelegate {
+class UIApplication extends STObject {
     
     private static $delegate = null;
     public $arguments;

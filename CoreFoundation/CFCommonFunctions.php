@@ -1,28 +1,65 @@
 <?
-//
 //  CFCommonFunctions.php
 //  Sonata/CoreFoundation
 //
-//  Created by Roman Efimov on 6/10/2010.
+// Copyright 2010 Roman Efimov <romefimov@gmail.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
+/*
+ * UTF-8 htmlentities
+ *
+ * @param string $s input html
+ * @return string output html string
+ */
 function html($s) {
     return htmlentities($s, ENT_QUOTES, 'UTF-8');
 }
 
-function CFHtmlPost($val) {
-    if (is_array($val)) {
-	    return $val;
+/*
+ * UTF-8 htmlentities, mostly used for post cleanups
+ *
+ * @param string $val input html
+ * @return string output html string
+ */
+function CFHtmlPost($s) {
+    if (is_array($s)) {
+	    return $s;
 	} else {
-	   return htmlentities($val, ENT_QUOTES, 'UTF-8');
+	   return htmlentities($s, ENT_QUOTES, 'UTF-8');
 	}
 }
 
+/*
+ * Truncates string
+ *
+ * @param string $str input string
+ * @param integer $max maximum number of characters
+ * @param string $after string appendix
+ * @return string truncated string
+ */
 function truncate($str, $max, $after='...') {
     $len = strlen($str);
     return $len > $max+strlen($after) ? substr($str, 0, $max).$after : $str;
 }
 
+/*
+ * Closes html tags
+ *
+ * @param string $html input html
+ * @return string output html
+ */
 function closeTags($html) {
     $arr_single_tags = array('meta','img','br','link','area');
     preg_match_all('#<([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
@@ -50,6 +87,13 @@ function closeTags($html) {
     return $html;
 }
 
+/*
+ * Generates password
+ *
+ * @param integer $length password length
+ * @param integer $strength password strength
+ * @return string generated password
+ */
 function generatePassword($length = 9, $strength = 0) {
     $vowels = 'aeuy';
     $consonants = 'bdghjmnpqrstvz';
@@ -80,6 +124,13 @@ function generatePassword($length = 9, $strength = 0) {
     return $password;
 }
 
+/*
+ * Gets alias from string (i.e. post title)
+ *
+ * @param string $s input string
+ * @param bool $replace_slash need to replace slash?
+ * @return string alias
+ */
 function getAlias($s, $replace_slash = false) {
     $s=str_replace("'", "-", $s);
     $s=str_replace(",", "-", $s);
@@ -96,13 +147,29 @@ function getAlias($s, $replace_slash = false) {
     return $s;
 }
 
+/*
+ * Tries to restore string from alias
+ *
+ * @param string $s input string
+ * @param string $symbol symbol to replace "-"
+ * @param bool $capitalize need to capitalize words?
+ * @return string output string
+ */
 function restoreAlias($s, $symbol = ' ', $capitalize = true) {
     $s=str_replace("-", " ", $s);
     if ($capitalize) $s=ucwords($s);
     $s=str_replace(" ", $symbol, $s);
     return $s;
 }
-   
+ 
+/*
+ * Gets slug from string (i.e. post title)
+ *
+ * @param string $str input string
+ * @param array $replace replacement values
+ * @param string $delimiter delimiter
+ * @return string slug
+ */  
 function getSlug($str, $replace=array(), $delimiter='-') {
     if( !empty($replace) ) {
         $str = str_replace((array)$replace, ' ', $str);
@@ -116,7 +183,14 @@ function getSlug($str, $replace=array(), $delimiter='-') {
     return $clean;
 }
 
-
+/*
+ * Creates page limit for convenient SQL usage,
+ * doesn't include LIMIT word.
+ *
+ * @param int $limit maximum items to show
+ * @param int $page page number
+ * @return string limit separated with comma
+ */
 function CFPageLimit($limit, $page) {
     $page=$page-1;
     if ($page < 0) $page=0;
@@ -126,6 +200,14 @@ function CFPageLimit($limit, $page) {
     return $page;
 }
 
+/*
+ * Creates page limit for convenient SQL usage,
+ * includes LIMIT word
+ *
+ * @param int $limit maximum items to show
+ * @param int $page page number
+ * @return string limit separated with comma
+ */
 function CFGetPageLimit($limit, $page) {        
     $page=$page-1;
     if ($page < 0) $page=0;
@@ -135,16 +217,34 @@ function CFGetPageLimit($limit, $page) {
     return $page;
 }
 
+/*
+ * Gets file extension from filename
+ *
+ * @param string $fileName file name
+ * @return string extension
+ */
 function CFFileExtension($fileName) {
     return substr($fileName, strrpos($fileName, '.') + 1);
 }
 
+/*
+ * Splits array
+ *
+ * @param array $array input array
+ * @return array splitted array
+ */
 function array_split($array) {           
     $end=count($array);
     $half = ($end % 2 )?  ceil($end/2): $end/2;
     return array(array_slice($array,0,$half),array_slice($array,$half));
 }
 
+/*
+ * Remove empty values from array
+ *
+ * @param array $array input array
+ * @return array updated array
+ */
 function array_remove_empty($arr){
 	$narr = array();
 	while(list($key, $val) = each($arr)) {

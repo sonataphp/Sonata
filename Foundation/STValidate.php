@@ -1,12 +1,12 @@
 <?
-//
 //  STValidate.php
 //  Sonata/Foundation
 //
-//  Created by Roman Efimov on 10/27/2010.
-//  @author     Kohana Team
-//  @copyright  (c) 2007-2008 Kohana Team
-//  @license    http://kohanaphp.com/license.html
+// Copyright 2008-2009 Kohana Team
+// Based on Kohana Valid
+// Modified to fit Sonata Framework syntax standards by Roman Efimov <romefimov@gmail.com>
+//
+// License: http://kohanaframework.org/license
 //
 
 class STValidate {
@@ -213,13 +213,12 @@ class STValidate {
 	}
 	
 	public static function username($username) {
-	
-	   if(!preg_match('/^[a-zA-Z\d.]{5,50}$/i', $username)){
-	      return false;
-	  } else {
-	      return true;
-	  }
-        }
+		if(!preg_match('/^[a-zA-Z\d.]{5,50}$/i', $username)){
+			return false;
+		} else {
+			return true;
+		}
+    }
 
 	/**
 	 * Checks if a string is a proper decimal format. The format array can be

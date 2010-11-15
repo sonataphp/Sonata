@@ -1,12 +1,26 @@
 <?
-//
 //  CFBase.php
 //  Sonata/CoreFoundation
 //
-//  Created by Roman Efimov on 6/10/2010.
+// Copyright 2010 Roman Efimov <romefimov@gmail.com>
 //
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// Setting locale to UTF-8
 setlocale(LC_ALL, 'en_US.UTF8');
 
+// Workaround for old PHP
 if (!function_exists('get_called_class')) {
     function get_called_class($bt = false,$l = 1) {
         if (!$bt) $bt = debug_backtrace();
@@ -50,7 +64,12 @@ if (!function_exists('get_called_class')) {
         }
     }
 }
-    
+
+/*
+ * CoreFoundation function to append include path (OS independent).
+ *
+ * @param string $path path to append.
+ */
 function CFIncludePathAdd ($path) {
     foreach (func_get_args() AS $path)     {
         if (!file_exists($path) OR (file_exists($path) && filetype($path) !== 'dir')) {
@@ -67,6 +86,11 @@ function CFIncludePathAdd ($path) {
     }
 }
 
+/*
+ * CoreFoundation function to remove include path (OS independent).
+ *
+ * @param string $path path to remove.
+ */
 function CFIncludePathRemove ($path) {
     foreach (func_get_args() AS $path) {
         $paths = explode(PATH_SEPARATOR, get_include_path());
@@ -85,55 +109,113 @@ function CFIncludePathRemove ($path) {
     }
 }
 
+/*
+ * CoreFoundation function to hide sensible paths from debugging.
+ *
+ * @param string $file data.
+ */
 function CFDebugPath($file) {
     $file = str_replace(CFFrameworkPath, "{FRAMEWORK}/", $file);
     $file = str_replace(CFAppPath, "{APPLICATION}/", $file);
     return $file;
 }
 
+/*
+ * CoreFoundation wrapper for spl_autoload_register.
+ *
+ * @param string $class target class.
+ * @param string $method target method.
+ */
 function CFAutoLoadRegister($class, $method) {
     spl_autoload_register(array($class, $method));
 }
 
+/*
+ * CoreFoundation wrapper for spl_autoload_unregister.
+ *
+ * @param string $class target class.
+ * @param string $method target method.
+ */
 function CFAutoLoadUnregister($class, $method) {
     spl_autoload_unregister(array($class, $method));
 }
 
+/*
+ * CoreFoundation wrapper for restore_error_handler.
+ */
 function CFErrorHandlingRestore() {
     restore_error_handler();
 }
 
+/*
+ * CoreFoundation wrapper for restore_exception_handler.
+ */
 function CFExceptionHandlingRestore() {
     restore_exception_handler();
 }
 
+/*
+ * CoreFoundation wrapper for set_exception_handler.
+ *
+ * @param string $class target class.
+ * @param string $method target method.
+ */
 function CFExceptionHandlingSet($class, $method) {
     set_exception_handler(array($class, $method));
 }
 
+/*
+ * CoreFoundation wrapper for set_error_handler.
+ *
+ * @param string $class target class.
+ * @param string $method target method.
+ */
 function CFErrorHandlingSet($class, $method) {
     set_error_handler(array($class, $method));
 }
 
+/*
+ * CoreFoundation wrapper for register_shutdown_function.
+ *
+ * @param string $class target class.
+ * @param string $method target method.
+ */
 function CFShutdownFunction($class, $method) {
     register_shutdown_function(array($class, $method));
 }
 
+/*
+ * CoreFoundation function CFErrorReporting sets error_reporting and
+ * php.ini display_errors parameters.
+ *
+ * @param integer $errorReporting error level.
+ * @param int $displayErrors display errors (1 or 0).
+ */
 function CFErrorReporting($errorReporting, $displayErrors) {
     error_reporting($errorReporting);
     ini_set('display_errors', $displayErrors);
 }
 
-// Memory functions
+/***********	Memory functions		*******/
 
+/*
+ * CoreFoundation wrapper for memory_get_usage.
+ */
 function CFMemoryRealUsage() {
     return memory_get_usage(true);
 }
 
+/*
+ * CoreFoundation wrapper for memory_get_peak_usage.
+ */
 function CFMemoryPeakUsage() {
     return memory_get_peak_usage(true);
 }
 
+/*
+ * CoreFoundation function to get current memory limit.
+ * @return string memory limit
+ */
 function CFMemoryLimit() {
     return ini_get("memory_limit");
 }

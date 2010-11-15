@@ -1,9 +1,20 @@
 <?
-//
 //  CFDate.php
 //  Sonata/CoreFoundation
 //
-//  Created by Roman Efimov on 6/10/2010.
+// Copyright 2010 Roman Efimov <romefimov@gmail.com>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 
 class CFDate {
@@ -11,6 +22,13 @@ class CFDate {
 	final private function __construct() {}
     final private function __clone() {}
 	
+	/*
+	 * Calculates time since date
+	 *
+	 * @param string $date input date (string)
+	 * @param string $format output date format
+	 * @return string nice looking time since
+	 */
 	public static function timeSince($date, $format = "M jS, Y") {
 		$dateDiff=time()-strtotime($date);
 		$fullYears = floor($dateDiff/(60*60*24*365));
@@ -44,9 +62,15 @@ class CFDate {
 		}
 	}
     
+	/*
+	 * Returns array of weekdays past since Monday of a given date
+	 *
+	 * @param string $date input date (string)
+	 * @return array days since Monday
+	 */
     public static function weekDaysSinceMonday($date) {
         // Assuming $date is in format DD-MM-YYYY
-        $date = date("d-m-Y");
+        $date = date("d-m-Y", strtotime($date));
         list($day, $month, $year) = explode("-", $date);
     
         // Get the weekday of the given date
@@ -68,37 +92,76 @@ class CFDate {
         $seconds_in_a_day = 86400;
     
         // Get date for 7 days from Monday (inclusive)
-        for($i=0; $i<7; $i++)
-        {
+        for($i=0; $i<7; $i++) {
             $dates[$i] = date('Y-m-d',$monday+($seconds_in_a_day*$i));
         }
     
         return $dates;
     }
     
+	/*
+	 * Calculates days between two dates
+	 *
+	 * @param time $start first date
+	 * @param time $end second date
+	 * @return int days between two dates
+	 */
     public static function daysBetween($start, $end) {
         $diff = $end_ts - $start_ts;
         return round($diff / 86400);
     }
     
+	/*
+	 * Gets range week days
+	 *
+	 * @param string $date input date
+	 * @return string $start_date
+	 * @return string $end_date
+	 */
     public static function weekDaysRange($date, &$start_date, &$end_date) {
         $dates = CFDate::weekDaysSinceMonday($date);
         $start_date = $dates[0];
         $end_date = $dates[6];
     }
     
+	/*
+	 * Gets first day of a month
+	 *
+	 * @param int $month month
+	 * @param int $year year
+	 * @return time first day of the month
+	 */
     public static function firstDayOfMonth($month, $year) {
         return strtotime(date("$year-$month-01 0:00:00"));
     }
     
+	/*
+	 * Gets last day of a month
+	 *
+	 * @param int $month month
+	 * @param int $year year
+	 * @return time last day of the month
+	 */
     public static function lastDayOfMonth($month, $year) {
 		return mktime(0, 0, 0, ($month + 1), 0, $year);
     }
     
+	/*
+	 * Returns day of a year
+	 *
+	 * @param string $date date (string)
+	 * @return int day of the year
+	 */
     public static function dayOfYear($date) {
-        echo date("z", mktime(0,0,0,date("m"),date("d"),date("Y")))+1;
+        echo date("z", mktime(0,0,0,date("m", strtotime($date)),date("d", strtotime($date)),date("Y", strtotime($date))))+1;
     }
     
+	/*
+	 * Returns day of the week
+	 *
+	 * @param string $date date (string)
+	 * @return int day of the week
+	 */
     public static function dayOfWeek($date) {
         $year = date("Y", $date);
         $month = date("n", $date);
@@ -126,6 +189,12 @@ class CFDate {
         return (int) ($day - 7 * floor($day / 7));
     }
     
+	/*
+	 * Checks if the year is leap
+	 *
+	 * @param int $year year
+	 * @return bool leap year or not
+	 */
     public static function isLeapYear($year){
 		$result = (($year%400 == 0) || ($year%4 == 0 && $year%100 != 0)) ? true : false;
 		return (bool) $result;

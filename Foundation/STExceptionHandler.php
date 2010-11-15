@@ -1,10 +1,13 @@
 <?
-//
 //  STExceptionHandler.php
 //  Sonata/Foundation
 //
-//  Created by Roman Efimov on 6/10/2010.
-//  Originally by Kohana Team, modified to fit Sonata syntax standards
+// Copyright 2008-2009 Kohana Team
+// Based on Kohana Exception Handler
+//
+// Modified to fit Sonata Framework syntax standards by Roman Efimov <romefimov@gmail.com>
+//
+// License: http://kohanaframework.org/license
 //
 
 class STFatalException extends ErrorException {}

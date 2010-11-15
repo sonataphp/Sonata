@@ -1,10 +1,12 @@
 <?
-//
 //  STCookie.php
 //  Sonata/Foundation
 //
-//  Created by Roman Efimov on 6/10/2010.
-//  Based on Kohana Cookies
+// Copyright 2008-2009 Kohana Team
+// Based on Kohana Cookies
+// Modified to fit Sonata Framework syntax standards by Roman Efimov <romefimov@gmail.com>
+//
+// License: http://kohanaframework.org/license
 //
 
 class STCookie extends STObject {
