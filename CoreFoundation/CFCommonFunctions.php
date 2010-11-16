@@ -28,6 +28,17 @@ function html($s) {
 }
 
 /*
+ * UTF-8 htmlentities
+ * Sonata syntax standards compliant alias for html function
+ *
+ * @param string $s input html
+ * @return string output html string
+ */
+function CFHtml($s) {
+    return html($s);
+}
+
+/*
  * UTF-8 htmlentities, mostly used for post cleanups
  *
  * @param string $val input html
@@ -49,7 +60,7 @@ function CFHtmlPost($s) {
  * @param string $after string appendix
  * @return string truncated string
  */
-function truncate($str, $max, $after='...') {
+function CFTruncate($str, $max, $after='...') {
     $len = strlen($str);
     return $len > $max+strlen($after) ? substr($str, 0, $max).$after : $str;
 }
@@ -60,7 +71,7 @@ function truncate($str, $max, $after='...') {
  * @param string $html input html
  * @return string output html
  */
-function closeTags($html) {
+function CFCloseTags($html) {
     $arr_single_tags = array('meta','img','br','link','area');
     preg_match_all('#<([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
     $openedtags = $result[1];
@@ -94,7 +105,7 @@ function closeTags($html) {
  * @param integer $strength password strength
  * @return string generated password
  */
-function generatePassword($length = 9, $strength = 0) {
+function CFGeneratePassword($length = 9, $strength = 0) {
     $vowels = 'aeuy';
     $consonants = 'bdghjmnpqrstvz';
     if ($strength & 1) {
@@ -125,29 +136,6 @@ function generatePassword($length = 9, $strength = 0) {
 }
 
 /*
- * Gets alias from string (i.e. post title)
- *
- * @param string $s input string
- * @param bool $replace_slash need to replace slash?
- * @return string alias
- */
-function getAlias($s, $replace_slash = false) {
-    $s=str_replace("'", "-", $s);
-    $s=str_replace(",", "-", $s);
-    $s=str_replace("&amp;", "-", $s);
-    $s=str_replace("&", "-", $s);
-    $s=str_replace(".", "", $s);
-    $s=str_replace("\"", "-", $s);
-    if ($replace_slash) $s=str_replace("/", "-", $s);
-    $s=str_replace(" ", "-", $s);
-    $s=str_replace("---", "-", $s);
-    $s=str_replace("--", "-", $s);
-    $s=preg_replace('/[^(\x20-\x7F)]*/','', $s);
-    $s=strtolower($s);
-    return $s;
-}
-
-/*
  * Tries to restore string from alias
  *
  * @param string $s input string
@@ -155,7 +143,7 @@ function getAlias($s, $replace_slash = false) {
  * @param bool $capitalize need to capitalize words?
  * @return string output string
  */
-function restoreAlias($s, $symbol = ' ', $capitalize = true) {
+function CFRestoreTitleFromSlug($s, $symbol = ' ', $capitalize = true) {
     $s=str_replace("-", " ", $s);
     if ($capitalize) $s=ucwords($s);
     $s=str_replace(" ", $symbol, $s);
@@ -170,7 +158,7 @@ function restoreAlias($s, $symbol = ' ', $capitalize = true) {
  * @param string $delimiter delimiter
  * @return string slug
  */  
-function getSlug($str, $replace=array(), $delimiter='-') {
+function CFGetSlug($str, $replace=array(), $delimiter='-') {
     if( !empty($replace) ) {
         $str = str_replace((array)$replace, ' ', $str);
     }
@@ -228,39 +216,14 @@ function CFFileExtension($fileName) {
 }
 
 /*
- * Splits array
+ * Gets file extension from filename using fileinfo
  *
- * @param array $array input array
- * @return array splitted array
+ * @param string $fileName file name
+ * @return string extension
  */
-function array_split($array) {           
-    $end=count($array);
-    $half = ($end % 2 )?  ceil($end/2): $end/2;
-    return array(array_slice($array,0,$half),array_slice($array,$half));
-}
-
-/*
- * Remove empty values from array
- *
- * @param array $array input array
- * @return array updated array
- */
-function array_remove_empty($arr){
-	$narr = array();
-	while(list($key, $val) = each($arr)) {
-	    if (is_array($val)){
-            $val = array_remove_empty($val);
-            if (count($val)!=0) {
-                 $narr[$key] = $val;
-            }
-	    } else {
-            if (trim($val) != ""){
-               $narr[$key] = $val;
-            }
-	    }
-	}
-	unset($arr); 
-	return $narr; 
+function CFFileExtensionReal($fileName) {
+    $info = pathinfo($fileName);
+    return $info['extenstion'];
 }
 
 ?>

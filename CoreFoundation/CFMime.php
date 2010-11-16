@@ -19,6 +19,7 @@
 
 /*
  * Returns array of MIME types
+ * Since you can not define arrays as constants, this is a dirty workaround
  *
  * @return array MIME types
  */
@@ -185,8 +186,7 @@ function CFMimeType() {
         'xpm'=>'image/x-xpixmap',
         'xwd'=>'image/x-xwindowdump',
         'xyz'=>'chemical/x-pdb',
-        'zip'=>'application/zip',
-    );
+        'zip'=>'application/zip');
 }
 
 /*

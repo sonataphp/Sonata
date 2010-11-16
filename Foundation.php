@@ -41,6 +41,7 @@ require_once "Foundation/STDatabaseException.php";
 require_once "Foundation/STCSV.php";
 require_once "Foundation/STLog.php";
 require_once "Foundation/STMail.php";
+require_once "Foundation/STInflector.php";
 require_once "Foundation/STDictionary.php";
 require_once "Foundation/STRouter.php";
 require_once "Foundation/STProfiler.php";

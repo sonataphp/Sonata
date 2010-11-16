@@ -42,7 +42,7 @@ class STString extends STObject implements ArrayAccess {
         return strlen($this->s);
     }
     
-    public function replace($from, $to) {
+    public function replace($from, $to = '') {
         $this->s = str_replace($from, $to, $this->s);
         return $this;
     }

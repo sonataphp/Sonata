@@ -17,6 +17,12 @@
 // limitations under the License.
 //
 
+/*
+ * Returns timezone table
+ * Since you can not define arrays as constants, this is a dirty workaround
+ *
+ * @return array timezone table
+ */
 function CFTimezoneTable() {
     return array(
         '-12:00,0' => 'Pacific/Fiji',
