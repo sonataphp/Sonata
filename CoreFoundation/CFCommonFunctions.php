@@ -158,7 +158,7 @@ function CFRestoreTitleFromSlug($s, $symbol = ' ', $capitalize = true) {
  * @param string $delimiter delimiter
  * @return string slug
  */  
-function CFGetSlug($str, $replace=array(), $delimiter='-') {
+function CFGetSlug($str, $replace=array(), $delimiter='-', $skipSlashes = true) {
     if( !empty($replace) ) {
         $str = str_replace((array)$replace, ' ', $str);
     }
@@ -166,7 +166,7 @@ function CFGetSlug($str, $replace=array(), $delimiter='-') {
     $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
     $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
     $clean = strtolower(trim($clean, '-'));
-    $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+    $clean = preg_replace(($skipSlashes)?"/[_|+ -]+/":"/[\/_|+ -]+/", $delimiter, $clean);
 
     return $clean;
 }
