@@ -20,35 +20,35 @@
 /*
  * UTF-8 htmlentities
  *
- * @param string $s input html
+ * @param string $inputString input html
  * @return string output html string
  */
-function html($s) {
-    return htmlentities($s, ENT_QUOTES, 'UTF-8');
+function html($inputString) {
+    return htmlentities($inputString, ENT_QUOTES, 'UTF-8');
 }
 
 /*
  * UTF-8 htmlentities
  * Sonata syntax standards compliant alias for html function
  *
- * @param string $s input html
+ * @param string $inputString input html
  * @return string output html string
  */
-function CFHtml($s) {
-    return html($s);
+function CFHtml($inputString) {
+    return html($inputString);
 }
 
 /*
  * UTF-8 htmlentities, mostly used for post cleanups
  *
- * @param string $val input html
+ * @param string $input input html
  * @return string output html string
  */
-function CFHtmlPost($s) {
-    if (is_array($s)) {
-	    return $s;
+function CFHtmlPost($input) {
+    if (is_array($input)) {
+	    return $input;
 	} else {
-	   return htmlentities($s, ENT_QUOTES, 'UTF-8');
+	   return htmlentities($input, ENT_QUOTES, 'UTF-8');
 	}
 }
 
@@ -60,7 +60,7 @@ function CFHtmlPost($s) {
  * @param string $after string appendix
  * @return string truncated string
  */
-function CFTruncate($str, $max, $after='...') {
+function CFTruncate($str, $max, $after = '...') {
     $len = strlen($str);
     return $len > $max+strlen($after) ? substr($str, 0, $max).$after : $str;
 }

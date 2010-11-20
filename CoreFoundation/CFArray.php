@@ -59,14 +59,14 @@ function array_split($array) {
 }
 
 /*
- * Remove empty values from array
+ * Removes empty values from array
  *
  * @param array $array input array
  * @return array updated array
  */
-function array_remove_empty($arr){
+function array_remove_empty($array){
 	$narr = array();
-	while(list($key, $val) = each($arr)) {
+	while(list($key, $val) = each($array)) {
 	    if (is_array($val)){
             $val = array_remove_empty($val);
             if (count($val)!=0) {
@@ -78,7 +78,7 @@ function array_remove_empty($arr){
             }
 	    }
 	}
-	unset($arr); 
+	unset($array); 
 	return $narr; 
 }
 

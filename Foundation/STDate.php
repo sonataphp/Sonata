@@ -53,8 +53,7 @@ class STDate extends STObject {
     }
     
     public function weekDaysRange() {
-        CFDate::weekDaysRange($this->timestamp, $start_date, $end_date);
-        return array($start_date, $end_date);
+        return CFDate::weekDaysRange($this->timestamp);
     }
     
     public function weekDaysSinceMonday() {

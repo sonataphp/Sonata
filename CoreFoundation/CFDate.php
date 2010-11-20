@@ -118,10 +118,11 @@ class CFDate {
 	 * @return string $start_date
 	 * @return string $end_date
 	 */
-    public static function weekDaysRange($date, &$start_date, &$end_date) {
+    public static function weekDaysRange($date) {
         $dates = CFDate::weekDaysSinceMonday($date);
         $start_date = $dates[0];
         $end_date = $dates[6];
+		return array($start_date, $end_date);
     }
     
 	/*
