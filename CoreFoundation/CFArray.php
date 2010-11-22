@@ -22,12 +22,12 @@ class CFArray {
 	final private function __construct() {}
     final private function __clone() {}
 
-	/**
-	 * Converts array to an object of given class
+	/*
+	 *  Creates and returns an object with the array keys as public variables.
 	 * 
-	 * @param array $array array to convert.
-	 * @param string $class output class
-	 * @return object of $class class
+	 *  @param array   $array  Array to convert.
+	 *  @param string  $class  Output class
+	 *  @return Object of class $class
 	 */
     public static function arrayToObject($array, $class = 'stdClass') {
 		$object = new $class();
@@ -47,10 +47,10 @@ class CFArray {
 // ====================== Addition to PHP array_ functions ===================
 
 /*
- * Splits array
+ *  Splits the array
  *
- * @param array $array input array
- * @return array splitted array
+ *  @param  array  $array Input array
+ *  @return array Array of 2 arrays
  */
 function array_split($array) {           
     $end=count($array);
@@ -59,10 +59,10 @@ function array_split($array) {
 }
 
 /*
- * Removes empty values from array
+ *  Removes empty values from the array.
  *
- * @param array $array input array
- * @return array updated array
+ *  @param array $array Input array
+ *  @return array
  */
 function array_remove_empty($array){
 	$narr = array();

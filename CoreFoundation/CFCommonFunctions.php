@@ -18,31 +18,31 @@
 //
 
 /*
- * UTF-8 htmlentities
+ *  UTF-8 htmlentities.
  *
- * @param string $inputString input html
- * @return string output html string
+ *  @param string $inputString Input string.
+ *  @return string String parsed with htmlentities.
  */
 function html($inputString) {
     return htmlentities($inputString, ENT_QUOTES, 'UTF-8');
 }
 
 /*
- * UTF-8 htmlentities
- * Sonata syntax standards compliant alias for html function
+ *  UTF-8 htmlentities.
+ *  Sonata syntax standards compliant alias for html function.
  *
- * @param string $inputString input html
- * @return string output html string
+ *  @param string $inputString Input string.
+ *  @return string String parsed with htmlentities.
  */
 function CFHtml($inputString) {
     return html($inputString);
 }
 
 /*
- * UTF-8 htmlentities, mostly used for post cleanups
+ *  UTF-8 htmlentities, used mostly for post cleanups.
  *
- * @param string $input input html
- * @return string output html string
+ *  @param string $inputString Input string.
+ *  @return string String parsed with htmlentities.
  */
 function CFHtmlPost($input) {
     if (is_array($input)) {
@@ -53,12 +53,12 @@ function CFHtmlPost($input) {
 }
 
 /*
- * Truncates string
+ *  Truncates string.
  *
- * @param string $str input string
- * @param integer $max maximum number of characters
- * @param string $after string appendix
- * @return string truncated string
+ *  @param string $str Input string.
+ *  @param integer $max Maximum number of characters.
+ *  @param string $after String appendix.
+ *  @return string Truncated string.
  */
 function CFTruncate($str, $max, $after = '...') {
     $len = strlen($str);
@@ -66,10 +66,10 @@ function CFTruncate($str, $max, $after = '...') {
 }
 
 /*
- * Closes html tags
+ *  Closes open HTML tags.
  *
- * @param string $html input html
- * @return string output html
+ *  @param string $html Input HTML string.
+ *  @return string Output HTML string.
  */
 function CFCloseTags($html) {
     $arr_single_tags = array('meta','img','br','link','area');
@@ -99,11 +99,11 @@ function CFCloseTags($html) {
 }
 
 /*
- * Generates password
+ *  Generates a password.
  *
- * @param integer $length password length
- * @param integer $strength password strength
- * @return string generated password
+ *  @param integer $length Password length.
+ *  @param integer $strength Password strength.
+ *  @return string Password string.
  */
 function CFGeneratePassword($length = 9, $strength = 0) {
     $vowels = 'aeuy';
@@ -136,27 +136,13 @@ function CFGeneratePassword($length = 9, $strength = 0) {
 }
 
 /*
- * Tries to restore string from alias
+ *  Gets slug from string (i.e. post title).
  *
- * @param string $s input string
- * @param string $symbol symbol to replace "-"
- * @param bool $capitalize need to capitalize words?
- * @return string output string
- */
-function CFRestoreTitleFromSlug($s, $symbol = ' ', $capitalize = true) {
-    $s=str_replace("-", " ", $s);
-    if ($capitalize) $s=ucwords($s);
-    $s=str_replace(" ", $symbol, $s);
-    return $s;
-}
- 
-/*
- * Gets slug from string (i.e. post title)
- *
- * @param string $str input string
- * @param array $replace replacement values
- * @param string $delimiter delimiter
- * @return string slug
+ *  @param string $str Input string.
+ *  @param array $replace Array of characters to replace with spaces.
+ *  @param string $delimiter Replace unappropriate symbols with delimiter.
+ *  @param bool Skip forward slash (/) when parsing string.
+ *  @return string Slug string.
  */  
 function CFGetSlug($str, $replace=array(), $delimiter='-', $skipSlashes = true) {
     if( !empty($replace) ) {
@@ -172,12 +158,27 @@ function CFGetSlug($str, $replace=array(), $delimiter='-', $skipSlashes = true) 
 }
 
 /*
- * Creates page limit for convenient SQL usage,
- * doesn't include LIMIT word.
+ *  Tries to restore string from alias.
  *
- * @param int $limit maximum items to show
- * @param int $page page number
- * @return string limit separated with comma
+ *  @param string $s Input string.
+ *  @param string $symbol Symbol to replace "-".
+ *  @param bool $capitalize Need to capitalize words?
+ *  @return string Output string.
+ */
+function CFRestoreTitleFromSlug($s, $symbol = ' ', $capitalize = true) {
+    $s=str_replace("-", " ", $s);
+    if ($capitalize) $s=ucwords($s);
+    $s=str_replace(" ", $symbol, $s);
+    return $s;
+}
+
+/*
+ *  Creates page limit for convenient SQL usage,
+ *  doesn't include LIMIT word.
+ *
+ *  @param int $limit Maximum items to show.
+ *  @param int $page Page number.
+ *  @return string String with format "X, Y", where X is offset and Y is items count.
  */
 function CFPageLimit($limit, $page) {
     $page=$page-1;
@@ -189,12 +190,12 @@ function CFPageLimit($limit, $page) {
 }
 
 /*
- * Creates page limit for convenient SQL usage,
- * includes LIMIT word
+ *  Creates page limit for convenient SQL usage,
+ *  includes LIMIT word.
  *
- * @param int $limit maximum items to show
- * @param int $page page number
- * @return string limit separated with comma
+ *  @param int $limit Maximum items to show.
+ *  @param int $page Page number.
+ *  @return string String with format "LIMIT X, Y", where X is offset and Y is items count.
  */
 function CFGetPageLimit($limit, $page) {        
     $page=$page-1;
@@ -206,20 +207,20 @@ function CFGetPageLimit($limit, $page) {
 }
 
 /*
- * Gets file extension from filename
+ *  Gets file extension from filename by stripping last word before comma.
  *
- * @param string $fileName file name
- * @return string extension
+ *  @param string $fileName Input filename.
+ *  @return string File extension.
  */
 function CFFileExtension($fileName) {
     return substr($fileName, strrpos($fileName, '.') + 1);
 }
 
 /*
- * Gets file extension from filename using fileinfo
+ *  Gets real file extension, works with .tar.gz.
  *
- * @param string $fileName file name
- * @return string extension
+ *  @param string $fileName Input filename.
+ *  @return string File extension.
  */
 function CFFileExtensionReal($fileName) {
     $info = pathinfo($fileName);

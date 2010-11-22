@@ -133,9 +133,9 @@ class DB extends STObject {
         return $driver::instance()->hasTransactionFailed();
     }
     
-    public static function hasTransactionSuccess() {
+    public static function hasTransactionSucceeded() {
         $driver = self::$driver;
-        return $driver::instance()->hasTransactionSuccess();
+        return $driver::instance()->hasTransactionSucceeded();
     }
     
     public static function completeTransaction() {
@@ -226,21 +226,6 @@ class DB extends STObject {
     public static function getTableFields($table) {
         $driver = self::$driver;
         return $driver::instance()->getTableFields($table);
-    }
-    
-    public static function getDate($time = null) {
-        $driver = self::$driver;
-        return $driver::instance()->getDate($time = null);
-    }
-    
-    public static function getDateTime($time = null) {
-        $driver = self::$driver;
-        return $driver::instance()->getDateTime($time = null);
-    }
-    
-    public static function getFormattedTime($format, $time) {
-        $driver = self::$driver;
-        return $driver::instance()->getFormattedTime($format, $time);
     }
     
     public static function getConnectionError() {

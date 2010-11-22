@@ -18,10 +18,10 @@
 //
 
 /*
- * Returns array of MIME types
- * Since you can not define arrays as constants, this is a dirty workaround
+ *  Returns array of MIME types. Since you can not define arrays as constants,
+ *  this is a dirty workaround.
  *
- * @return array MIME types
+ *  @return array Array of MIME types.
  */
 function CFMimeType() {
     return array(
@@ -190,9 +190,10 @@ function CFMimeType() {
 }
 
 /*
- * Gets MIME type by extension
+ *  Gets MIME type by extension.
  *
- * @return string MIME type
+ *  @param string $extension File extension.
+ *  @return string MIME type.
  */
 function CFMimeTypeByExtension($extension) {
     $types = CFMimeType();

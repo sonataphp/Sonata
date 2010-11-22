@@ -66,9 +66,9 @@ if (!function_exists('get_called_class')) {
 }
 
 /*
- * CoreFoundation function to append include path (OS independent).
+ *  CoreFoundation function to append include path (OS independent).
  *
- * @param string $path path to append.
+ *  @param string $path Path to append.
  */
 function CFIncludePathAdd ($path) {
     foreach (func_get_args() AS $path)     {
@@ -87,9 +87,9 @@ function CFIncludePathAdd ($path) {
 }
 
 /*
- * CoreFoundation function to remove include path (OS independent).
+ *  CoreFoundation function to remove include path (OS independent).
  *
- * @param string $path path to remove.
+ *  @param string $path Path to remove.
  */
 function CFIncludePathRemove ($path) {
     foreach (func_get_args() AS $path) {
@@ -110,111 +110,118 @@ function CFIncludePathRemove ($path) {
 }
 
 /*
- * CoreFoundation function to hide sensible paths from debugging.
+ *  CoreFoundation function to hide sensible paths from debugging.
  *
- * @param string $file data.
+ *  @param string $file Filepath.
  */
-function CFDebugPath($file) {
-    $file = str_replace(CFFrameworkPath, "{FRAMEWORK}/", $file);
-    $file = str_replace(CFAppPath, "{APPLICATION}/", $file);
-    return $file;
+function CFDebugPath($filepath) {
+    $filepath = str_replace(CFFrameworkPath, "{FRAMEWORK}/", $filepath);
+    $filepath = str_replace(CFAppPath, "{APPLICATION}/", $filepath);
+    return $filepath;
 }
 
 /*
- * CoreFoundation wrapper for spl_autoload_register.
+ *  CoreFoundation wrapper for spl_autoload_register.
  *
- * @param string $class target class.
- * @param string $method target method.
+ *  @param string $class Target class.
+ *  @param string $method Target method.
  */
 function CFAutoLoadRegister($class, $method) {
     spl_autoload_register(array($class, $method));
 }
 
 /*
- * CoreFoundation wrapper for spl_autoload_unregister.
+ *  CoreFoundation wrapper for spl_autoload_unregister.
  *
- * @param string $class target class.
- * @param string $method target method.
+ *  @param string $class Target class.
+ *  @param string $method Target method.
  */
 function CFAutoLoadUnregister($class, $method) {
     spl_autoload_unregister(array($class, $method));
 }
 
 /*
- * CoreFoundation wrapper for restore_error_handler.
- */
-function CFErrorHandlingRestore() {
-    restore_error_handler();
-}
-
-/*
- * CoreFoundation wrapper for restore_exception_handler.
- */
-function CFExceptionHandlingRestore() {
-    restore_exception_handler();
-}
-
-/*
- * CoreFoundation wrapper for set_exception_handler.
+ *  CoreFoundation wrapper for set_error_handler.
  *
- * @param string $class target class.
- * @param string $method target method.
- */
-function CFExceptionHandlingSet($class, $method) {
-    set_exception_handler(array($class, $method));
-}
-
-/*
- * CoreFoundation wrapper for set_error_handler.
- *
- * @param string $class target class.
- * @param string $method target method.
+ *  @param string $class Target class.
+ *  @param string $method Target method.
  */
 function CFErrorHandlingSet($class, $method) {
     set_error_handler(array($class, $method));
 }
 
 /*
- * CoreFoundation wrapper for register_shutdown_function.
+ *  CoreFoundation wrapper for restore_error_handler.
+ * 
+ */
+function CFErrorHandlingRestore() {
+    restore_error_handler();
+}
+
+/*
+ *  CoreFoundation wrapper for set_exception_handler.
  *
- * @param string $class target class.
- * @param string $method target method.
+ *  @param string $class Target class.
+ *  @param string $method Target method.
+ */
+function CFExceptionHandlingSet($class, $method) {
+    set_exception_handler(array($class, $method));
+}
+
+/*
+ *  CoreFoundation wrapper for restore_exception_handler.
+ *  
+ */
+function CFExceptionHandlingRestore() {
+    restore_exception_handler();
+}
+
+/*
+ *  CoreFoundation wrapper for register_shutdown_function.
+ *
+ *  @param string $class Target class.
+ *  @param string $method Target method.
  */
 function CFShutdownFunction($class, $method) {
     register_shutdown_function(array($class, $method));
 }
 
 /*
- * CoreFoundation function CFErrorReporting sets error_reporting and
- * php.ini display_errors parameters.
+ *  CoreFoundation function CFErrorReporting sets error_reporting and php.ini
+ *  display_errors parameters.
  *
- * @param integer $errorReporting error level.
- * @param int $displayErrors display errors (1 or 0).
+ *  @param integer $errorReporting Error reporting level.
+ *  @param int $displayErrors Display errors (1 or 0).
  */
 function CFErrorReporting($errorReporting, $displayErrors) {
     error_reporting($errorReporting);
     ini_set('display_errors', $displayErrors);
 }
 
-/***********	Memory functions		*******/
+// ====================== Memory functions ===================
 
 /*
- * CoreFoundation wrapper for memory_get_usage.
+ *  CoreFoundation wrapper for memory_get_usage.
+ *
+ *  @return int Returns the amount of memory, in bytes, that's currently being allocated to PHP script.
  */
 function CFMemoryRealUsage() {
     return memory_get_usage(true);
 }
 
 /*
- * CoreFoundation wrapper for memory_get_peak_usage.
+ *  CoreFoundation wrapper for memory_get_peak_usage.
+ *
+ *  @return int Returns the peak of memory, in bytes, that's been allocated to PHP script.
  */
 function CFMemoryPeakUsage() {
     return memory_get_peak_usage(true);
 }
 
 /*
- * CoreFoundation function to get current memory limit.
- * @return string memory limit
+ *  CoreFoundation function to get current memory limit.
+ *  
+ *  @return string Returns the memory limit set in php.ini.
  */
 function CFMemoryLimit() {
     return ini_get("memory_limit");

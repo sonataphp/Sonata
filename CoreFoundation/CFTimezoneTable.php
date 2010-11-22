@@ -18,10 +18,10 @@
 //
 
 /*
- * Returns timezone table
- * Since you can not define arrays as constants, this is a dirty workaround
+ *  Returns timezone table. Since you can not define arrays as constants,
+ *  this is a dirty workaround.
  *
- * @return array timezone table
+ *  @return array Array of timezones.
  */
 function CFTimezoneTable() {
     return array(
@@ -80,6 +80,12 @@ function CFTimezoneTable() {
         '+13:00,0' => 'Pacific/Tongatapu');
 }
 
+/*
+ *  Gets timezone name by timezone offset.
+ *
+ *  @param string $extension Timezone offset.
+ *  @return string Timezone name.
+ */
 function CFTimezoneName($timezone) {
     $timezones = CFTimezoneTable();
     return $timezones[trim($timezone)];

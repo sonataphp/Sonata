@@ -23,11 +23,11 @@ class CFDate {
     final private function __clone() {}
 	
 	/*
-	 * Calculates time since date
+	 *  English representation of time passed since $date.
 	 *
-	 * @param string $date input date (string)
-	 * @param string $format output date format
-	 * @return string nice looking time since
+	 *  @param string $date String date.
+	 *  @param string $format Format for output date (when the difference is more 4 days).
+	 *  @return string English string representing time passed since $date.
 	 */
 	public static function timeSince($date, $format = "M jS, Y") {
 		$dateDiff=time()-strtotime($date);
@@ -63,10 +63,10 @@ class CFDate {
 	}
     
 	/*
-	 * Returns array of weekdays past since Monday of a given date
+	 *  Returns array of weekdays past since Monday of a given date.
 	 *
-	 * @param string $date input date (string)
-	 * @return array days since Monday
+	 *  @param string $date String date.
+	 *  @return array Array of days in Y-m-d format.
 	 */
     public static function weekDaysSinceMonday($date) {
         // Assuming $date is in format DD-MM-YYYY
@@ -100,11 +100,11 @@ class CFDate {
     }
     
 	/*
-	 * Calculates days between two dates
+	 *  Calculates days between two dates.
 	 *
-	 * @param time $start first date
-	 * @param time $end second date
-	 * @return int days between two dates
+	 *  @param timestamp $start Start date, timestamp.
+	 *  @param timestamp $end End date, timestamp.
+	 *  @return int Difference in days.
 	 */
     public static function daysBetween($start, $end) {
         $diff = $end_ts - $start_ts;
@@ -112,11 +112,10 @@ class CFDate {
     }
     
 	/*
-	 * Gets range week days
+	 *  Returns first and last week days of the given date.
 	 *
-	 * @param string $date input date
-	 * @return string $start_date
-	 * @return string $end_date
+	 *  @param string $date String date.
+	 *  @return array Array with 2 values: first and last week days.
 	 */
     public static function weekDaysRange($date) {
         $dates = CFDate::weekDaysSinceMonday($date);
@@ -126,42 +125,42 @@ class CFDate {
     }
     
 	/*
-	 * Gets first day of a month
+	 *  Returns timestamp of the first day of the month.
 	 *
-	 * @param int $month month
-	 * @param int $year year
-	 * @return time first day of the month
+	 *  @param int $month Month.
+	 *  @param int $year Year.
+	 *  @return timestamp Timestamp of the first day of the month.
 	 */
     public static function firstDayOfMonth($month, $year) {
         return strtotime(date("$year-$month-01 0:00:00"));
     }
     
 	/*
-	 * Gets last day of a month
+	 *  Returns timestamp of the last day of the month.
 	 *
-	 * @param int $month month
-	 * @param int $year year
-	 * @return time last day of the month
+	 *  @param int $month Month.
+	 *  @param int $year Year.
+	 *  @return timestamp Timestamp of the last day of the month.
 	 */
     public static function lastDayOfMonth($month, $year) {
 		return mktime(0, 0, 0, ($month + 1), 0, $year);
     }
     
 	/*
-	 * Returns day of a year
+	 *  Returns the day of the year (starting from 0).
 	 *
-	 * @param string $date date (string)
-	 * @return int day of the year
+	 *  @param string $date String date.
+	 *  @return int day of the year
 	 */
     public static function dayOfYear($date) {
         echo date("z", mktime(0,0,0,date("m", strtotime($date)),date("d", strtotime($date)),date("Y", strtotime($date))))+1;
     }
     
 	/*
-	 * Returns day of the week
+	 *  Returns the day of the week (starting from 0). 0 is Sunday.
 	 *
-	 * @param string $date date (string)
-	 * @return int day of the week
+	 *  @param string $date String date.
+	 *  @return int Int value, the day of the week.
 	 */
     public static function dayOfWeek($date) {
 		$date = strtotime($date);
@@ -192,10 +191,10 @@ class CFDate {
     }
     
 	/*
-	 * Checks if the year is leap
+	 *  Checks if the year is leap.
 	 *
-	 * @param int $year year
-	 * @return bool leap year or not
+	 *  @param int $year Year.
+	 *  @return bool true if the year is leap, otherwise false.
 	 */
     public static function isLeapYear($year) {
 		$result = (($year%400 == 0) || ($year%4 == 0 && $year%100 != 0)) ? true : false;

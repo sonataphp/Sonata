@@ -41,54 +41,54 @@ class STObject {
     # Identifying Classes 
     
     /*
-     * Returns the class name
+     *  Returns the class name
      * 
-     * @return  string   Class Name
+     *  @return  string   Class name
      */
     public function className() {
         return get_called_class();
     }
     
     /*
-     * Returns the parent class name
+     *  Returns the parent class name
      * 
-     * @return  string   Parent Class Name
+     *  @return  string   Parent class name.
      */
     public function parentClassName() {
         return get_parent_class($this);
     }
     
     /*
-     * Returns a Boolean value that indicates whether the receiver is an
-     * instance of a given class.
+     *  Returns a Boolean value that indicates whether the receiver is an
+     *  instance of a given class.
      * 
-     * @param   string    Class Name
-     * @return  boolean   true if the receiver is an instance of $class_name,
-     *                    otherwise false.
+     *  @param   string    Class Name
+     *  @return  boolean   true if the receiver is an instance of $class_name,
+     *                     otherwise false.
      */
     public function isMemberOfClass($className) {
         return (bool) ($this->className() == $className);
     }
     
     /*
-     * Returns a Boolean value that indicates whether the receiving class is a
-     * subclass of, or identical to, a given class.
+     *  Returns a Boolean value that indicates whether the receiving class is a
+     *  subclass of, or identical to, a given class.
      * 
-     * @param   string    Class Name
-     * @return  boolean   true if the receiving class is a subclass of—or
-     *                    identical to $className, otherwise false.
+     *  @param   string    Class Name
+     *  @return  boolean   true if the receiving class is a subclass of—or
+     *                     identical to $className, otherwise false.
      */
     public function isSubclassOfClass($className) {
         return (bool) is_subclass_of($this, $className);
     }
     
     /*
-     * Returns a Boolean value that indicates whether the receiver is an
-     * instance of given class or an instance of any class that
-     * inherits from that class.
+     *  Returns a Boolean value that indicates whether the receiver is an
+     *  instance of given class or an instance of any class that
+     *  inherits from that class.
      * 
-     * @param   string   Class Name
-     * @return  boolean  
+     *  @param   string   Class Name
+     *  @return  boolean  
      */
     public function isKindOfClass($className) {
         return (bool) ($this instanceof $className);

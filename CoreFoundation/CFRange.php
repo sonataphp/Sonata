@@ -18,17 +18,34 @@
 //
 
 class CFRange implements IteratorAggregate, ArrayAccess, Serializable, Countable {
+    
     private $container;
     
-    public function copyFromArray($array) {
-        $this->container = $array;
-    }
-    
+    /*
+     *  Creates CFRange object.
+     *
+     *  @param int $location The start index (0 is the first, as in C arrays).
+     *  @param int $length The number of items in the range (can be 0).
+     */
     public function __construct($location, $length) {
         for ($i = $location; $i <= $location+$length; $i++)
             $this->container[] = $i;
     }
     
+    /*
+     *  Copies range from the array.
+     *
+     *  @param array $array Array to copy ranges from.
+     */
+    public function copyFromArray($array) {
+        $this->container = $array;
+    }
+    
+    /*
+     *  Creates a new iterator from the object instance.
+     *
+     *  @return CFRange A new ArrayIterator object.
+     */
     public function getIterator() {
         return new ArrayIterator($this->container);
     }
@@ -49,6 +66,11 @@ class CFRange implements IteratorAggregate, ArrayAccess, Serializable, Countable
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
     }
     
+    /*
+     *  Serializes range.
+     *
+     *  @return string Serialized range.
+     */
     public function serialize() {
         return serialize($this->container);
     }
@@ -56,15 +78,36 @@ class CFRange implements IteratorAggregate, ArrayAccess, Serializable, Countable
         $this->container = unserialize($data);
     }
     
+    /*
+     *  Counts items in the container object.
+     *
+     *  @return int Number of items in the range.
+     */
     public function count() {
         return count($this->container);
     }
 }
 
+// ===== CoreFoundation functions that operate on ranges =======
+
+/*
+ *  Creates a new CFRange from the specified values.
+ *
+ *  @param int $location The start index (0 is the first, as in C arrays).
+ *  @param int $length The number of items in the range (can be 0).
+ *  @return CFRange A new CFRange object.
+ */
 function CFRangeMake($location, $length) {
     return new CFRange($location, $length);
 }
 
+/*
+ *  Creates a new CFRange from the string, values separated with $separator.
+ *
+ *  @param string $string String to make range from.
+ *  @param string $separator Values separator, "," is default.
+ *  @return CFRange A new CFRange object.
+ */
 function CFRangeMakeFromString($string, $separator = ',') {
     $range = new CFRange(0, 0);
     $range->copyFromArray(explode($separator, $string));
