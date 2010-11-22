@@ -168,9 +168,9 @@ class DB extends STObject {
         return $driver::instance()->disableUniqueCheck();
     }
     
-    public static function truncateTable($table) {
+    public static function truncateTable($tableName) {
         $driver = self::$driver;
-        return $driver::instance()->truncateTable($table);
+        return $driver::instance()->truncateTable($tableName);
     }
     
     public static function disableForeignKeys() {

@@ -392,9 +392,46 @@ class DBMySQLDriver extends STObject {
 	}
       
 	/*
+	 *  Completes transaction.
+	 *
+	 */
+	public function completeTransaction() {
+		if (!(isset($this) && get_class($this) == __CLASS__))
+			return DBMySQLDriver::instance()->completeTransaction();
+	  
+		$this->_transaction_starts--;
+	  
+		if ($this->_transaction_starts==0) {
+			if ($this->_is_transactions) {
+				if (!$this->_has_transaction_failed) {
+					$this->query("COMMIT");
+					$this->query("SET AUTOCOMMIT=1");
+				} else $this->failTransaction();
+			}
+			$this->_has_transaction_failed = false;
+		} 
+	}
+
+	/*
+	 *  Fails transaction.
+	 *
+	 */
+	public function failTransaction() {
+		if (!(isset($this) && get_class($this) == __CLASS__))
+			return DBMySQLDriver::instance()->failTransaction();
+			
+		$this->_has_transaction_failed = true;
+		
+		if ($this->_is_transactions) {
+			$this->query("ROLLBACK");
+			$this->query("SET AUTOCOMMIT=1");
+		}
+	}  
+	
+	/*
 	 *  Checks if the transaction has failed.
 	 *
-	 * @return  bool true if the transaction has failed, otherwise false.
+	 *  @return  bool true if the transaction has failed, otherwise false.
 	 */
 	public function hasTransactionFailed() {	
 		if(!(isset($this) && get_class($this) == __CLASS__))
@@ -404,10 +441,9 @@ class DBMySQLDriver extends STObject {
 	}
 
 	/*
-	 * Checks if a transaction has succeeded.
+	 *  Checks if the transaction has succeeded.
 	 *
-	 * @param   void
-	 * @return  boolean
+	 *  @return  bool true if the transaction has succeeded, otherwise false.
 	 */
 	public function hasTransactionSucceeded() {
 		if(!(isset($this) && get_class($this) == __CLASS__))
@@ -416,180 +452,210 @@ class DBMySQLDriver extends STObject {
 		return !$this->_has_transaction_failed;
 	}
 	
-      /*
-       * Completes transaction.
-       *
-       * @param   void
-       * @return  null
-       */
-      function completeTransaction() {
-	    if(!(isset($this) && get_class($this) == __CLASS__))
-			return DBMySQLDriver::instance()->completeTransaction();
-		
-	    $this->_transaction_starts--;
-		
-	    if($this->_transaction_starts==0) {
-		  if($this->_is_transactions) {
-			if(!$this->_has_transaction_failed) {
-			      $this->query("COMMIT");
-			      $this->query("SET AUTOCOMMIT=1");
-			} else 
-			      $this->fail_transaction();
-		  }
-				
-		  $this->_has_transaction_failed = false;
-	    } 
-      }
-
-      /*
-       * Fails transaction.
-       *
-       * @param   void
-       * @return  null
-       */
-      public function failTransaction() {
-	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return DBMySQLDriver::instance()->failTransaction();
-			
-	    $this->_has_transaction_failed = true;
-		
-	    if($this->_is_transactions) {
-		  $this->query("ROLLBACK");
-		  $this->query("SET AUTOCOMMIT=1");
-	    }
-      }
+	/*
+	 *  Disables table keys.
+	 *
+	 *  @param   string  $tableName  Table name.
+	 *  @return  mixed   Query result.
+	 */
+    public function disableTableKeys($tableName) {
+	    return $this->query("ALTER TABLE `".$tableName."` DISABLE KEYS");
+    }		
 	
-      public function disableTableKeys($tablename) {
-	    return $this->query("ALTER TABLE `".$tablename."` DISABLE KEYS");
-      }		
+	/*
+	 *  Enables table keys.
+	 *
+	 *  @param   string  $tableName  Table name.
+	 *  @return  mixed   Query result.
+	 */
+    public function enableTableKeys($tableName) {
+		return $this->query("ALTER TABLE `".$tableName."` ENABLE KEYS");
+    }
 	
-
-      public function enableTableKeys($tablename) {
-	    return $this->query("ALTER TABLE `".$tablename."` ENABLE KEYS");
-      }
-		
-
-      public function enableUniqueCheck() {
+	/*
+	 *  Enables unique check.
+	 *  
+	 *  @return  mixed   Query result.
+	 */
+	public function enableUniqueCheck() {
 	    return $this->query("SET UNIQUE_CHECKS=1");
-      }
+    }
 
-      public function disableUniqueCheck() {
+	/*
+	 *  Disables unique check.
+	 *  
+	 *  @return  mixed   Query result.
+	 */
+    public function disableUniqueCheck() {
 	    return $this->query("SET UNIQUE_CHECKS=0");
-      }			
+    }			
       
-      /*
-       * Truncates a table.
-       *
-       * @param   string   Table name
-       * @return  mixed    Query results
-       */
-      public function truncateTable($tablename) {
-	    return $this->query("TRUNCATE `".$tablename."`");
-      }
+	/*
+	 *  Enables foreign key checks.
+	 *  
+	 *  @return  mixed   Query result.
+	 */
+	public function enableForeignKeys() {
+		if(!(isset($this) && get_class($this) == __CLASS__))
+			return DBMySQLDriver::instance()->enableForeignKeys();		
+  
+		return $this->query("SET FOREIGN_KEY_CHECKS=1");
+	}
 	
-      public function disableForeignKeys() {
-	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return DBMySQLDriver::instance()->disableForeignKeys();		
+	/*
+	 *  Disables foreign key checks.
+	 *  
+	 *  @return  mixed  Query result.
+	 */
+	public function disableForeignKeys() {
+		if(!(isset($this) && get_class($this) == __CLASS__))
+			return DBMySQLDriver::instance()->disableForeignKeys();		
+  
+		return $this->query("SET FOREIGN_KEY_CHECKS=0");
+	} 
 	
-	    return $this->query("SET FOREIGN_KEY_CHECKS=0");
-      }
-	
-      public function enableForeignKeys() {
-	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return DBMySQLDriver::instance()->enableForeignKeys();		
-	
-	    return $this->query("SET FOREIGN_KEY_CHECKS=1");
-      }
+	/*
+	 *  Truncates the table.
+	 *
+	 *  @param   string  $tableName  Table name.
+	 *  @return  mixed   Query result.
+	 */
+	public function truncateTable($tableName) {
+		return $this->query("TRUNCATE `".$tableName."`");
+	}
       
-      /*
-      * See if a table exists in the database.
-      *
-      * @param   string   Table name
-      * @return  boolean
-      */
-      public function doesTableExist($tablename) {							
-	    return (bool) $this->selectFirst("SHOW TABLES LIKE '".$tablename."'");			
-      }		
+	/*
+	 *  Sees if the table exists in the database.
+	 *
+	 *  @param   string  $tableName Table name.
+	 *  @return  bool    true if the table exists, otherwise false.
+	 */
+	public function doesTableExist($tableName) {							
+		return (bool) $this->selectFirst("SHOW TABLES LIKE '".$tableName."'");			
+	}		
 	
-      /*
-      * See if a database exists in the schema.
-      *
-      * @param   string   Table name
-      * @return  boolean
-      */
-      public function doesDatabaseExist($dbName) {
-	    $sql = "SELECT count(*) FROM `information_schema`.`schemata` WHERE `schema_name` = '".$dbName."'";									
-	    return ($this->getVar($sql));
-      }
+	/*
+	 *  Sees if the database exists in the schema.
+	 *
+	 *  @param   string  $dbName Table name.
+	 *  @return  bool    true if the database exists, otherwise false.
+	 */
+	public function doesDatabaseExist($dbName) {
+		$sql = "SELECT count(*) FROM `information_schema`.`schemata` WHERE `schema_name` = '".$dbName."'";									
+		return ($this->getVar($sql));
+	}
       
-      /*
-       * Creates a database.
-       *
-       * @param   string   Database name
-       * @return  mixed    Query results
-       */
-      public function createDatabase($dbName) {
-	    return $this->query("CREATE DATABASE ".$dbName);
-      }
+	/*
+	 *  Creates a new database.
+	 *
+	 *  @param   string $dbName  Database name.
+	 *  @return  mixed  Query result.
+	 */
+	public function createDatabase($dbName) {
+		return $this->query("CREATE DATABASE ".$dbName);
+	}	
 	
-      public static function getMySQLImportCommand($dbHost, $dbUser, $dbPassword, $dbName, $sqlFile) {
-	    $cmd = "mysql -h%s -u%s -p%s %s < %s";
-	    return sprintf($cmd,$dbHost,$dbUser,$dbPassword,$dbName,$sqlFile);
-      }	
+	/*
+	 *  Drops the database.
+	 *
+	 *  @param   string $dbName  Database name.
+	 *  @return  mixed  Query result.
+	 */
+	public function dropDatabase($dbName) {
+		return $this->query("DROP DATABASE ".$dbName);
+	}
 	
-      /*
-       * Drops a database.
-       *
-       * @param   string   Database name
-       * @return  mixed    Query results
-       */
-      public function dropDatabase($dbName) {
-	    return $this->query("DROP DATABASE ".$dbName);
-      }
+	/*
+	 *  Creates a new database user.
+	 *
+	 *  @param   string $username  Username.
+	 *  @param   string $password  Password.
+	 *  @param   string $database  Database name.
+	 *  @param   string $host      Database host.
+	 *  @param   bool   $select    Grant select permission.
+	 *  @param   bool   $update    Grant update permission.
+	 *  @param   bool   $delete    Grant delete permission.
+	 *  @param   bool   $insert    Grant insert permission.
+	 *  @return  mixed  Query result.
+	 */
+	public function createUser($username, $password, $database, $host, $select = true, $update = true, $delete = true, $insert = true) {	
+		$privs = array();
+		if ($select) $privs[] = "SELECT";
+		if ($update) $privs[] = "UPDATE";
+		if ($delete) $privs[] = "DELETE";			
+		if ($insert) $privs[] = "INSERT";
+		$priv_str = implode(",",$privs);
+		$sql = "GRANT ".$priv_str." ON ".$database.".* TO '".$username."'@'".$host."' IDENTIFIED BY '".$password."';";
+		return $this->query($sql);		
+	}
 	
-      /*
-       * Drops a user.
-       *
-       * @param   string   Username
-       * @param   string   Host
-       * @return  mixed    Query results
-       */
-      public function dropUser($dbUser, $dbHost) {
-	    return $this->query("DROP USER `".$dbUser."`@`".$dbHost."`");
-      }		
+	/*
+	 *  Drops the user.
+	 *
+	 *  @param   string $dbUser  Username.
+	 *  @param   string $dbHost  Host.
+	 *  @return  mixed  Query result.
+	 */
+	public function dropUser($dbUser, $dbHost) {
+		return $this->query("DROP USER `".$dbUser."`@`".$dbHost."`");
+	}		
 	
-      public function createUser($username, $password, $database, $host, $select=true, $update=true, $delete=true, $insert=true) {	
-	    $privs = array();
-	    if ($select) $privs[] = "SELECT";
-	    if ($update) $privs[] = "UPDATE";
-	    if ($delete) $privs[] = "DELETE";			
-	    if ($insert) $privs[] = "INSERT";
-		
-	    $priv_str = implode(",",$privs);
-		
-	    $sql = "GRANT ".$priv_str." ON ".$database.".* TO '".$username."'@'".$host."' IDENTIFIED BY '".$password."';";
+	/*
+	 *  Sees if the user exists.
+	 *
+	 *  @param   string  $username Username.
+	 *  @param   string  $host  Host.
+	 *  @return  bool  true if the user exists, otherwise false.
+	 */
+	public function doesUserExist($username, $host) {
+		$sql = "SELECT count(*) FROM `mysql`.`user` WHERE `User` = '".$username."' AND `Host` = '".$host."'";			
+	  
+		return $this->getVar($sql)>0;
+	}
 	
-	    return $this->query($sql);		
-      }
+	/*
+	 *  Returns the list of tables.
+	 *
+	 *  @return  array  List of tables.
+	 */
+	public function getTables() {			
+		$tables = $this->select("SHOW TABLES");					
+		return $tables;		
+	}
 	
-      public function doesUserExist($username, $host) {
-	    $sql = "SELECT count(*) FROM `mysql`.`user` WHERE `User` = '".$username."' AND `Host` = '".$host."'";			
-		
-	    return $this->getVar($sql)>0;
-      }
+	/*
+	 *  Returns fields from the table.
+	 *
+	 *  @param  string $tableName Table name.
+	 *  @return  array  List of fields.
+	 */
+	public function getTableFields($tableName) {
+		return $this->select("SHOW FULL FIELDS FROM `".$tableName."`");		
+	}
 	
-      public function getTables() {			
-	    $tables = $this->select("SHOW TABLES");					
-	    return $tables;		
-      }
+	/*
+	 *  Returns MySQL file import command.
+	 *
+	 *  @param   string $dbHost  Database host.
+	 *  @param   string $dbUser  Username.
+	 *  @param   string $dbPassword  Password.
+	 *  @param   string $dbName  Database name.
+	 *  @param   string $sqlFile  SQL file to import.
+	 *  @return  string Command string.
+	 */
+	public static function getMySQLImportCommand($dbHost, $dbUser, $dbPassword, $dbName, $sqlFile) {
+		$cmd = "mysql -h%s -u%s -p%s %s < %s";
+		return sprintf($cmd, $dbHost, $dbUser, $dbPassword, $dbName, $sqlFile);
+	}
 	
-      public function getTableFields($tablename) {
-	    return $this->select("SHOW FULL FIELDS FROM `".$tablename."`");		
-      }
-      
-      public function getConnectionError() {
-	    return $this->_connection->error;
-      }
+	/*
+	 *  Returns connection error (if any).
+	 *
+	 *  @return  mixed  Connection error.
+	 */
+	public function getConnectionError() {
+		return $this->_connection->error;
+	}
       
 } 
 
