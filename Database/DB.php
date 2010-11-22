@@ -33,7 +33,7 @@ class DB extends STObject {
     }
     
     public static function useDriver($driver) {
-        $driver = $driver.'Driver';
+        $driver = "DB".$driver.'Driver';
         self::$driver = new $driver();
         return $this;
     }

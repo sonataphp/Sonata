@@ -18,6 +18,6 @@
 //
 
 require_once "Foundation.php";
-require_once "Database/MySQLDriver.php";
+require_once "Database/DBMySQLDriver.php";
 require_once "Database/DB.php";
 ?>

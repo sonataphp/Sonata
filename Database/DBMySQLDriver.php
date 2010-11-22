@@ -1,5 +1,5 @@
 <?
-//  MySQLDriver.php
+//  DBMySQLDriver.php
 //  Sonata/Database
 //
 // Copyright 2010 Roman Efimov <romefimov@gmail.com>
@@ -17,7 +17,7 @@
 // limitations under the License.
 //
 
-class MySQLDriver extends STObject {
+class DBMySQLDriver extends STObject {
       private static $_instance = null;
       private $_connection = null;
       private $_db_name = null;
@@ -36,13 +36,13 @@ class MySQLDriver extends STObject {
       # implementation
       
       /*
-       * Returns a singleton instance of DB.
+       * Returns a singleton instance of DBMySQLDriver.
        *
        * @param   void
        * @return  DB
        */
-      static function instance() {
-	    if(!self::$_instance) self::$_instance = new MySQLDriver();
+      public static function instance() {
+	    if(!self::$_instance) self::$_instance = new DBMySQLDriver();
 	    return self::$_instance;
       }
       
@@ -66,26 +66,6 @@ class MySQLDriver extends STObject {
        */
       public function getConnection() {
 	    return $this->_connection;
-      }
-	
-      /*
-       * Gets current database name.
-       *
-       * @param   void
-       * @return  string   Database name
-       */
-      protected function getDBName() {
-	    return $this->_db_name;
-      }
-      
-      /*
-       * Sets current database name.
-       *
-       * @param   string   Database name   
-       * @return  null
-       */
-      protected function setDbName($db_name) {
-	    $this->_db_name = $db_name;
       }
 	
       /*
@@ -174,9 +154,8 @@ class MySQLDriver extends STObject {
 
 		  $connection->set_charset('utf8');
 
-		  $db = new MySQLDriver();			
+		  $db = new DBMySQLDriver();			
 		  $db->setConnection($connection);
-		  $db->setDBName($db_name);
 			
 		} else {
 		
@@ -191,9 +170,8 @@ class MySQLDriver extends STObject {
 		  if (!mysql_select_db($db_name, $link))
 			throw new STDatabaseException("Failed to select DB: ".mysql_error());
 				
-		  $db = new MySQLDriver();			
+		  $db = new DBMySQLDriver();			
 		  $db->setConnection($link);
-		  $db->setDBName($db_name);
 	    }
 
 	    return $db;
@@ -431,7 +409,7 @@ class MySQLDriver extends STObject {
        */
       function startTransaction() {
 	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return MySQLDriver::instance()->startTransaction();
+		  return DBMySQLDriver::instance()->startTransaction();
 	
 	    if($this->_is_transactions) {	
 
@@ -452,7 +430,7 @@ class MySQLDriver extends STObject {
        */
       function hasTransactionFailed() {	
 	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return MySQLDriver::instance()->hasTransactionFailed();
+		  return DBMySQLDriver::instance()->hasTransactionFailed();
 		
 	    return $this->_has_transaction_failed;
       }
@@ -465,7 +443,7 @@ class MySQLDriver extends STObject {
        */
       function hasTransactionSuccess() {
 	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return MySQLDriver::instance()->hasTransactionSuccess();
+		  return DBMySQLDriver::instance()->hasTransactionSuccess();
 	
 	    return !$this->has_transaction_failed();
       }
@@ -478,7 +456,7 @@ class MySQLDriver extends STObject {
        */
       function completeTransaction() {
 	    if(!(isset($this) && get_class($this) == __CLASS__))
-			return MySQLDriver::instance()->completeTransaction();
+			return DBMySQLDriver::instance()->completeTransaction();
 		
 	    $this->_transaction_starts--;
 		
@@ -503,7 +481,7 @@ class MySQLDriver extends STObject {
        */
       function failTransaction() {
 	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return MySQLDriver::instance()->failTransaction();
+		  return DBMySQLDriver::instance()->failTransaction();
 			
 	    $this->_has_transaction_failed = true;
 		
@@ -543,14 +521,14 @@ class MySQLDriver extends STObject {
 	
       public function disableForeignKeys() {
 	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return MySQLDriver::instance()->disableForeignKeys();		
+		  return DBMySQLDriver::instance()->disableForeignKeys();		
 	
 	    return $this->query("SET FOREIGN_KEY_CHECKS=0");
       }
 	
       public function enableForeignKeys() {
 	    if(!(isset($this) && get_class($this) == __CLASS__))
-		  return MySQLDriver::instance()->enableForeignKeys();		
+		  return DBMySQLDriver::instance()->enableForeignKeys();		
 	
 	    return $this->query("SET FOREIGN_KEY_CHECKS=1");
       }
