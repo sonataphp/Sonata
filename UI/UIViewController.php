@@ -40,7 +40,7 @@ class UIViewController extends STObject {
         $phtmls = $this->view->subviews();
         if (is_array($phtmls) && (count($phtmls > 0)))
         foreach ($phtmls as $fileName) {
-            ob_clean();
+            if (ob_get_length() > 0) ob_clean();
             ob_start();
             if (UIViewCache::isCached($fileName)) {
                 $this->attachSubview(UIViewCache::getTemplate($fileName));

@@ -25,6 +25,15 @@ class UIViewParser {
         return (is_array($type))?implode(",", $type):'';
     }
     
+    private static function filter($result, $params) {
+        unset($params[0]);
+        if (is_array($params) && count($params) > 0)
+            foreach ($params as $param)
+                if (function_exists($param))
+                    $result = $param($result);
+        return $result;
+    }
+    
     public static function callback($matches) {
         $result = $matches[0];
         switch ($result) {
@@ -139,22 +148,31 @@ class UIViewParser {
                 $result = implode("\r\n", $data);
                 break;
         }
-        if (strpos($result, "post:") > 0) {
+        if ( (strpos($result, "var:") > 0) || (strpos($result, "post:")) || (strpos($result, "get:")) ) {
             $ar = array();
-            preg_match_all("/\{\{[a-z\d_-]{1,}:([a-z\d_-]{1,})\}\}/i", $result, $ar);
-            $result = isset(STRequest::postParams()->$ar[1][0])?html(STRequest::postParams()->$ar[1][0]):'';
-        }
-        if (strpos($result, "get:") > 0) {
-            $ar = array();
-            preg_match_all("/\{\{[a-z\d_-]{1,}:([a-z\d_-]{1,})\}\}/i", $result, $ar);
-            $result = isset(STRequest::getParams()->$ar[1][0])?html(STRequest::getParams()->$ar[1][0]):'';
+            preg_match_all("/\{\{[a-z\d_-]{1,}:([a-z\d_>-]{1,})\}\}/i", $result, $ar);
+            $params = explode(">", $ar[1][0]);
+            $var = $params[0];
+            if (strpos($result, "var:") > 0)
+                if (property_exists(self::$delegate, $var)) {
+                    $result = self::$delegate->$var;
+                    $result = self::filter($result, $params);
+                }
+            if (strpos($result, "post:")) {
+                $result = isset(STRequest::postParams()->$var)?html(STRequest::postParams()->$var):'';
+                $result = self::filter($result, $params);
+            }
+            if (strpos($result, "get:")) {
+                $result = isset(STRequest::getParams()->$var)?html(STRequest::getParams()->$var):'';
+                $result = self::filter($result, $params);
+            }
         }
         return $result;
     }
     
     public static function parse(&$delegate, $content) {
         self::$delegate = $delegate;
-        $content = preg_replace_callback("/\{\{(?:[a-z0-9\_\:\s\-\/]+)\}\}/i",
+        $content = preg_replace_callback("/\{\{(?:[a-z0-9\_\:\s\-\/\>]+)\}\}/i",
                                          array('UIViewParser', 'callback'),
                                          $content);
         return $content;

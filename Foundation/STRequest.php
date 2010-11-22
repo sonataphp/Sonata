@@ -64,7 +64,7 @@ class STRequest extends STObject {
      */
     protected static function _stripSlashes($value) {
         if(is_array($value)) {
-                return array_map(array(self,'_stripSlashes'), $value);
+                return array_map(array('STRequest','_stripSlashes'), $value);
             } else {
                 return stripslashes($value);
             }

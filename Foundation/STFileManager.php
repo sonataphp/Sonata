@@ -35,7 +35,7 @@ class STFileManager extends STObject {
     }
     
     public static function deleteFile($path) {
-        @unlink($path);
+        unlink($path);
     }
     
     public static function deleteFolder($path) {
@@ -55,11 +55,11 @@ class STFileManager extends STObject {
     }
     
     public static function changeMode($fileName, $mode) {
-        @chmod($fileName, $mode);
+        chmod($fileName, $mode);
     }
     
     public static function uploadFile($source, $dest) {
-        return @move_uploaded_file($source, $dest);
+        return move_uploaded_file($source, $dest);
     }
     
     public static function openFile($filePath) {

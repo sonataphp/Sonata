@@ -164,6 +164,7 @@ class CFDate {
 	 * @return int day of the week
 	 */
     public static function dayOfWeek($date) {
+		$date = strtotime($date);
         $year = date("Y", $date);
         $month = date("n", $date);
         $day = date("d", $date);
@@ -196,7 +197,7 @@ class CFDate {
 	 * @param int $year year
 	 * @return bool leap year or not
 	 */
-    public static function isLeapYear($year){
+    public static function isLeapYear($year) {
 		$result = (($year%400 == 0) || ($year%4 == 0 && $year%100 != 0)) ? true : false;
 		return (bool) $result;
     }

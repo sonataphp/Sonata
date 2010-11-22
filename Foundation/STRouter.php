@@ -91,8 +91,8 @@ class STRouter extends STObject {
 		self::$route_found = true;
 		$params = $route->params;
 		self::$controller = $params['controller']; unset($params['controller']);
-		self::$action = $params['action']; unset($params['action']);
-		self::$id = $params['id'];
+		self::$action = (isset($params['action']))?$params['action']:""; unset($params['action']);
+		self::$id = (isset($params['id']))?$params['id']:"";
 		self::$params = $params;
 				
 		if (empty(self::$controller)) self::$controller = ROUTER_DEFAULT_CONTROLLER;

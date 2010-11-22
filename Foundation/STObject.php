@@ -19,7 +19,7 @@
 // =========================== Description ==========================
 //
 // STObject is the root class of most Sonata class hierarchies.
-// Through STObject, objects inherit a basic interface to the runtime
+// Through STObject, objects inherit a basic interface to the 
 // system and the ability to behave as Sonata objects.
 //
 
@@ -34,8 +34,8 @@ class STObject {
     }
 	    
     public function __set($property, $value) {
-	$method = "set".ucwords($property);
-	if (method_exists($this, $method)) return $this->$method($value);
+		$method = "set".ucwords($property);
+		if (method_exists($this, $method)) return $this->$method($value);
     }
     
     # Identifying Classes 
@@ -76,7 +76,7 @@ class STObject {
      * 
      * @param   string    Class Name
      * @return  boolean   true if the receiving class is a subclass of—or
-     *                    identical to $class_name, otherwise false.
+     *                    identical to $className, otherwise false.
      */
     public function isSubclassOfClass($className) {
         return (bool) is_subclass_of($this, $className);
@@ -96,10 +96,7 @@ class STObject {
     
     # Sending Messages
     
-    /*
-     * This method is in Beta
-     */
-    public function performSelector($function, $argv) {
+    private function performSelector($function, $argv) {
         $argv = (array) func_get_args();
         $function = $argv[0];
         array_shift($argv);

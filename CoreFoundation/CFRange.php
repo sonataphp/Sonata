@@ -65,9 +65,9 @@ function CFRangeMake($location, $length) {
     return new CFRange($location, $length);
 }
 
-function CFRangeFromString($string) {
+function CFRangeMakeFromString($string, $separator = ',') {
     $range = new CFRange(0, 0);
-    $range->copyFromArray(explode(",", $string));
+    $range->copyFromArray(explode($separator, $string));
     return $range;
 }
 

@@ -32,5 +32,5 @@ if (!function_exists('main'))
     trigger_error("Application entry point function not found", E_USER_ERROR);
 
 // Magic
-main($argc, $argv);
+main(isset($args)?$argc:0, isset($argv)?$argv:array());
 ?>
