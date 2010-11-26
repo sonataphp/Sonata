@@ -9,6 +9,12 @@
 // License: http://kohanaframework.org/license
 //
 
+define("STCookieExpirationHour", 3600);
+define("STCookieExpirationDay", 86400);
+define("STCookieExpirationWeek", 604800);
+define("STCookieExpirationMonth", 2592000);
+define("STCookieExpirationYear", 31536000);
+
 class STCookie extends STObject {
         /**
 	 * @var  string  Magic salt to add to the cookie
@@ -23,12 +29,12 @@ class STCookie extends STObject {
 	/**
 	 * @var  string  Restrict the path that the cookie is available to
 	 */
-	public static $path = '/';
+	private static $path = '/';
 
 	/**
 	 * @var  string  Restrict the domain that the cookie is available to
 	 */
-	public static $domain = NULL;
+	private static $domain = NULL;
 
 	/**
 	 * @var  boolean  Only transmit cookies over secure connections
@@ -103,12 +109,25 @@ class STCookie extends STObject {
 		return setcookie($name, $value, $expiration, STCookie::$path, STCookie::$domain, STCookie::$secure, STCookie::$httponly);
 	}
 	
+	public static function setPath($path) {
+		self::$path = $path;
+	}
+	
+	public static function setDomain($domain) {
+		self::$domain = $domain;
+	}
+	
 	public static function initWithRegistry() {
 		if (STRegistry::get("Cookie_Path"))
-				self::$path = STRegistry::get("Cookie_Path");
+				self::setPath(STRegistry::get("Cookie_Path"));
 				
 		if (STRegistry::get("Cookie_Domain"))
-				self::$domain = STRegistry::get("Cookie_Domain");
+				self::setDomain(STRegistry::get("Cookie_Domain"));
+	}
+	
+	public static function initWithPathAndDomain($path, $domain) {
+		self::$path = $path;
+		self::$domain = $domain;
 	}
 
 	/**

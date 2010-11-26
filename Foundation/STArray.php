@@ -101,14 +101,14 @@ class STArray extends ArrayObject {
         call_user_func_array($this->className()."::".$function, $argv);
     }
     
-    function toObject() {
+    public function toObject() {
 		$array = $this;
 		return CFArray::arrayToObject($array);
     }
     
 }
 
-function STArray($array) {
+function STArray($array = array()) {
     return new STArray($array);
 }
 

@@ -40,28 +40,18 @@ class STDate extends STObject {
         return $this;
     }
     
+    public function now() {
+        $this->timestamp = time();
+        return $this;
+    }
+    
     public function setFormat($format) {
         $this->format = $format;
+        return $this;
     }
     
     public function __toString() {
         return date($this->format, $this->timestamp);
-    }
-    
-    public function isLeapYear() {
-        return (bool) CFDate::isLeapYear(date("Y", $this->timestamp));
-    }
-    
-    public function weekDaysRange() {
-        return CFDate::weekDaysRange($this->timestamp);
-    }
-    
-    public function weekDaysSinceMonday() {
-        return CFDate::weekDaysSinceMonday($this->timestamp);
-    }
-    
-    public function timeSince($format = "M jS, Y") {
-        return CFDate::timeSince($this->timestamp, $format);
     }
     
     public function asInt() {
@@ -78,6 +68,22 @@ class STDate extends STObject {
     
     public function year() {
         return date("Y", $this->timestamp);
+    }
+    
+    public function isLeapYear() {
+        return (bool) CFDate::isLeapYear(date("Y", $this->timestamp));
+    }
+    
+    public function weekDaysRange() {
+        return CFDate::weekDaysRange(date("Y-m-d H:i:s", $this->timestamp));
+    }
+    
+    public function weekDaysSinceMonday() {
+        return CFDate::weekDaysSinceMonday(date("Y-m-d H:i:s", $this->timestamp));
+    }
+    
+    public function timeSince($format = "M jS, Y") {
+        return CFDate::timeSince(date("Y-m-d H:i:s", $this->timestamp), $format);
     }
     
     public function dayOfWeek() {
@@ -125,6 +131,36 @@ class STDate extends STObject {
         $this->timestamp = strtotime("-".abs($days)." days", $this->timestamp);
         return $this;
     }
+    
+    public function addHours($hours) {
+        $this->timestamp = strtotime("+".abs($hours)." hours", $this->timestamp);
+        return $this;
+    }
+    
+    public function subHours($hours) {
+        $this->timestamp = strtotime("-".abs($hours)." hours", $this->timestamp);
+        return $this;
+    }
+    
+    public function addMinutes($minutes) {
+        $this->timestamp = strtotime("+".abs($minutes)." minutes", $this->timestamp);
+        return $this;
+    }
+    
+    public function subMinutes($minutes) {
+        $this->timestamp = strtotime("-".abs($minutes)." minutes", $this->timestamp);
+        return $this;
+    }
+    
+    public function addSeconds($seconds) {
+        $this->timestamp = strtotime("+".abs($minutes)." seconds", $this->timestamp);
+        return $this;
+    }
+    
+    public function subSeconds($seconds) {
+        $this->timestamp = strtotime("-".abs($minutes)." seconds", $this->timestamp);
+        return $this;
+    }
 }
 
 /*
@@ -135,7 +171,7 @@ function STDate($format = 'Y-m-d H:i:s') {
 }
 
 function STDateNow($format = 'Y-m-d H:i:s') {
-    return STDate($format)->dateWithTimestamp(strtotime(date("Y-m-d H:i:s")));
+    return STDate($format)->now();
 }
 
 ?>

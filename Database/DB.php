@@ -26,8 +26,6 @@ class DB extends STObject {
     final private function __construct() { }
     final private function __clone() {}
     
-    private static $_outputFormatObject = true;
-    
     private static function preprocessResults($results) {
         return $results;
     }
@@ -38,16 +36,12 @@ class DB extends STObject {
         return $this;
     }
     
-    public static function returnsObject($yes = true) {
-        self::$_outputFormatObject = $yes;
-    }
-    
-    public static function defaultConnectionFromObject($data) {
+    public static function defaultConnectionFromObject($object) {
         $driver = self::$driver;
-        $driver::setDefaultDBConnection($driver::getDBConnection($data->host,
-                                                                 $data->user,
-                                                                 $data->password,
-                                                                 $data->database));
+        $driver::setDefaultDBConnection($driver::getDBConnection($object->host,
+                                                                 $object->user,
+                                                                 $object->password,
+                                                                 $object->database));
     }
     
     public static function defaultConnection($host, $user, $password, $database) {
@@ -63,34 +57,9 @@ class DB extends STObject {
         return $driver::instance()->escape($string);
     }
     
-    public static function getLastInsertId() {
-        $driver = self::$driver;
-        return $driver::instance()->getLastInsertId();
-    }
-    
-    public static function foundRows() {
-        $driver = self::$driver;
-        return $driver::instance()->foundRows();
-    }
-    
     public static function query($sql) {
         $driver = self::$driver;
         return $driver::instance()->query($sql);
-    }
-    
-    public static function insert($table, $data) {
-        $driver = self::$driver;
-        return $driver::instance()->insert($table, $data);
-    }
-    
-    public static function insertOnDuplicate($table, $data, $duplicate) {
-        $driver = self::$driver;
-        return $driver::instance()->insertOnDuplicate($table, $data, $duplicate);
-    }
-    
-    public static function update($table, $data, $where = '1') {
-        $driver = self::$driver;
-        return $driver::instance()->update($table, $data, $where);
     }
     
     public static function all($sql, $internalCacheResults = true) {
@@ -113,6 +82,31 @@ class DB extends STObject {
         return $data;
     }
     
+    public static function insert($table, $data) {
+        $driver = self::$driver;
+        return $driver::instance()->insert($table, $data);
+    }
+    
+    public static function update($table, $data, $where = '1') {
+        $driver = self::$driver;
+        return $driver::instance()->update($table, $data, $where);
+    }
+    
+    public static function insertOnDuplicate($table, $data, $duplicate) {
+        $driver = self::$driver;
+        return $driver::instance()->insertOnDuplicate($table, $data, $duplicate);
+    }
+    
+    public static function getLastInsertId() {
+        $driver = self::$driver;
+        return $driver::instance()->getLastInsertId();
+    }
+    
+    public static function foundRows() {
+        $driver = self::$driver;
+        return $driver::instance()->foundRows();
+    }
+    
     public static function charset($charset = '') {
         $driver = self::$driver;
         return $driver::instance()->setDefaultCharset($charset);
@@ -128,16 +122,6 @@ class DB extends STObject {
         return $driver::instance()->startTransaction();
     }
     
-    public static function hasTransactionFailed() {
-        $driver = self::$driver;
-        return $driver::instance()->hasTransactionFailed();
-    }
-    
-    public static function hasTransactionSucceeded() {
-        $driver = self::$driver;
-        return $driver::instance()->hasTransactionSucceeded();
-    }
-    
     public static function completeTransaction() {
         $driver = self::$driver;
         return $driver::instance()->completeTransaction();
@@ -146,6 +130,16 @@ class DB extends STObject {
     public static function failTransaction() {
         $driver = self::$driver;
         return $driver::instance()->failTransaction();
+    }
+    
+    public static function hasTransactionFailed() {
+        $driver = self::$driver;
+        return $driver::instance()->hasTransactionFailed();
+    }
+    
+    public static function hasTransactionSucceeded() {
+        $driver = self::$driver;
+        return $driver::instance()->hasTransactionSucceeded();
     }
     
     public static function disableTableKeys($table) {
@@ -168,11 +162,6 @@ class DB extends STObject {
         return $driver::instance()->disableUniqueCheck();
     }
     
-    public static function truncateTable($tableName) {
-        $driver = self::$driver;
-        return $driver::instance()->truncateTable($tableName);
-    }
-    
     public static function disableForeignKeys() {
         $driver = self::$driver;
         return $driver::instance()->disableUniqueCheck();
@@ -181,6 +170,11 @@ class DB extends STObject {
     public static function enableForeignKeys() {
         $driver = self::$driver;
         return $driver::instance()->enableForeignKeys();
+    }
+    
+    public static function truncateTable($tableName) {
+        $driver = self::$driver;
+        return $driver::instance()->truncateTable($tableName);
     }
     
     public static function doesTableExist($table) {
@@ -203,14 +197,14 @@ class DB extends STObject {
         return $driver::instance()->dropDatabase($db);
     }
     
-    public static function dropUser($user) {
-        $driver = self::$driver;
-        return $driver::instance()->dropUser($user);
-    }
-    
     public static function createUser($username, $password, $database, $host, $select = true, $update = true, $delete = true, $insert = true) {
         $driver = self::$driver;
         return $driver::instance()->createUser($username, $password, $database, $host, $select, $update, $delete, $insert);
+    }
+    
+    public static function dropUser($user, $host) {
+        $driver = self::$driver;
+        return $driver::instance()->dropUser($user, $host);
     }
     
     public static function doesUserExist($user, $host) {

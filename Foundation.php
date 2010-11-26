@@ -29,7 +29,6 @@ require_once "Foundation/STRequest.php";
 require_once "Foundation/STSession.php";
 require_once "Foundation/STCookie.php";
 require_once "Foundation/STServer.php";
-require_once "Foundation/STString.php";
 require_once "Foundation/STDate.php";
 require_once "Foundation/STArray.php";
 require_once "Foundation/STFile.php";

@@ -50,15 +50,15 @@ class CFDate {
 			if ($fullDays == 1) return "1 day ago";
 			if ($fullDays == 2) return "2 days ago";
 			if ($fullDays == 3) return "3 days ago";
-			if ($fullDays > 3) return date("Y", strtotime($dt) > 1970)?date($format, strtotime($dt)):'';
+			if ($fullDays > 3) return date("Y", strtotime($date) > 1970)?date($format, strtotime($date)):'';
 		}
 		if (($fullMonths > 0) && ($fullYears == 0)) {
-			if ($fullMonths == 1) return date("Y", strtotime($dt) > 1970)?date($format, strtotime($dt)):'';
-			if ($fullMonths > 1) return date("Y", strtotime($dt) > 1970)?date($format, strtotime($dt)):'';
+			if ($fullMonths == 1) return date("Y", strtotime($date) > 1970)?date($format, strtotime($date)):'';
+			if ($fullMonths > 1) return date("Y", strtotime($date) > 1970)?date($format, strtotime($date)):'';
 		}
 		if ($fullYears > 0) {
-			if ($fullYears == 1) return date("Y", strtotime($dt) > 1970)?date($format, strtotime($dt)):'';
-			if ($fullYears > 1) return date("Y", strtotime($dt) > 1970)?date($format, strtotime($dt)):'';
+			if ($fullYears == 1) return date("Y", strtotime($date) > 1970)?date($format, strtotime($date)):'';
+			if ($fullYears > 1) return date("Y", strtotime($date) > 1970)?date($format, strtotime($date)):'';
 		}
 	}
     
@@ -143,7 +143,7 @@ class CFDate {
 	 *  @return timestamp Timestamp of the last day of the month.
 	 */
     public static function lastDayOfMonth($month, $year) {
-		return mktime(0, 0, 0, ($month + 1), 0, $year);
+		return mktime(23, 59, 59, ($month + 1), 0, $year);
     }
     
 	/*

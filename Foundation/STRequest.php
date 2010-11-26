@@ -22,7 +22,6 @@ class STRequest extends STObject {
     protected static $_data = array();
     protected static $_post = array();
     protected static $_get = array();
-    protected static $_cookie = array();
     
     final private function __construct() {}
     final private function __clone() {}
@@ -31,7 +30,6 @@ class STRequest extends STObject {
         self::$_data = array_merge(self::$_data, $_REQUEST);
         self::$_get = array_merge(self::$_get, $_GET);
         self::$_post = array_merge(self::$_post, $_POST);
-        self::$_cookie = array_merge(self::$_cookie, $_COOKIE);
         self::_clean();
     }
 
@@ -52,8 +50,8 @@ class STRequest extends STObject {
         return STArray(self::$_post)->toObject();
     }
     
-    public static function cookieParams() {
-        return STArray(self::$_cookie)->toObject();
+    public static function dataParams() {
+        return STArray(self::$_data)->toObject();
     }
     
     /**
@@ -70,7 +68,7 @@ class STRequest extends STObject {
             }
     }
 
-    public static function isPost(){
+    public static function isPost() {
             return $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'];
     }
 
