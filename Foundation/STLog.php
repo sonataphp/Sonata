@@ -20,10 +20,10 @@
 define("STLogStorageFileSystem", 0);
 define("STLogStorageDatabase", 1);
 
-class STLog extends STObject {
+class STLog {
   
     private static $_storage = STLogStorageFileSystem;
-    private static $_filepath = '';
+    private static $_filepath = '/tmp/Sonata.log';
     private static $_isEnabled = false;
   
     public static function enableWithStorage($storage) {

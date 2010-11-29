@@ -23,7 +23,6 @@ class STProfiler {
     private static $current;
     private static $startTime;
     private static $endTime;
-    private static $options;
     private static $log;
 	private static $_tolog = false;
 	private static $is_profiling = false;
@@ -37,9 +36,8 @@ class STProfiler {
 	    return number_format(($end)-($start), 2);
     }
       
-    public static function init($options = array()) {
+    public static function init() {
         self::$enabled=true;
-        self::$options=$options;
         self::$startTime=self::getTimeStamp();
 		self::$is_profiling = true;
     }
@@ -75,9 +73,6 @@ class STProfiler {
 	
     public static function end() {
         if (!self::$enabled) return;
-        if ((!self::$options['includes']) && (self::$current['type'] == 'Include')) return;
-        if ((!self::$options['sql']) && (self::$current['type'] == 'SQL query')) return;
-        if ((!self::$options['tz']) && (self::$current['type'] == 'TZ')) return;
         self::$current['endTime']=self::getTimeStamp();
         $dif=self::getElapsedTime(self::$current['startTime'], self::$current['endTime']);
         self::$log.='<tr><td'.((self::$current['type'] == 'Exception')?' style="background: #ff5044"':'').'><pre>'.self::$current['info'].'</pre></td><td'.((self::$current['type'] == 'Exception')?' style="background: #ff5044"':'').'>'.self::$current['type'].'</td><td'.((self::$current['type'] == 'Exception')?' style="background: #ff5044"':'').'>'.$dif.' ms.</td></tr>';

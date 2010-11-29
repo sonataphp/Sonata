@@ -35,8 +35,16 @@ class STRouter extends STObject {
 		return self::$controller;
 	}
 	
+	public static function setController($controller) {
+		self::$controller = $controller;
+	}
+	
 	public static function action() {
 		return self::$action;
+	}
+	
+	public static function setAction($action) {
+		self::$action = $action;
 	}
 	
 	public static function params($param = null) {
@@ -52,9 +60,8 @@ class STRouter extends STObject {
 		return self::$routes;
 	}
 	
-	public static function restart() {
-		self::$_instance = new Router();
-		return self::instance();
+	public static function routeFound() {
+		return self::$route_found;
 	}
 	
 	public static function init() {
@@ -77,11 +84,10 @@ class STRouter extends STObject {
 	}
 	
 	public static function map($rule, $target=array(), $conditions=array()) {
-		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);
-                
+		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);      
 	}
 	
-	public function defaultRoutes() {
+	public static function defaultRoutes() {
 		self::map('/:controller');
 		self::map('/:controller/:action');
 		self::map('/:controller/:action/:id');
@@ -104,15 +110,12 @@ class STRouter extends STObject {
 		self::$controller_name = implode('', $w);
 	}
 	
-	public function execute($merge_get = true) {
-		
-		foreach(self::$routes as $route) {
-                    
+	public function execute() {
+		foreach(self::$routes as $route)
 			if ($route->is_matched) {
-				self::setRoute($route, $merge_get);
+				self::setRoute($route);
 				break;
 			}
-		}
 	}
 }
 
@@ -123,7 +126,7 @@ class Route {
 	public $url;
 	private $conditions;
 	
-	function __construct($url, $request_uri, $target, $conditions) {
+	public function __construct($url, $request_uri, $target, $conditions) {
 		$this->url = $url;
 		$this->params = array();
 		$this->conditions = $conditions;
@@ -145,7 +148,7 @@ class Route {
 		unset($p_names); unset($p_values);
 	}
 	
-	function regex_url($matches) {
+	public function regex_url($matches) {
 		$key = str_replace(':', '', $matches[0]);
                 if (array_key_exists($key, $this->conditions)) {
                     return '('.$this->conditions[$key].')';

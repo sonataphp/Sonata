@@ -1,5 +1,5 @@
 <?
-//  UI.php
+//  UIComponent.php
 //  Sonata/UI
 //
 // Copyright 2010 Roman Efimov <romefimov@gmail.com>
@@ -17,21 +17,25 @@
 // limitations under the License.
 //
 
-require_once "Foundation.php";
-require_once "UI/UIApplicationError.php";
-require_once "UI/UIApplicationMain.php";
-require_once "UI/UIApplication.php";
-require_once "UI/UIViewController.php";
-require_once "UI/UIView.php";
-require_once "UI/UIViewCache.php";
-require_once "UI/UIAjaxController.php";
-require_once "UI/UIMinifierViewController.php";
-require_once "UI/UIFlashMessage.php";
-require_once "UI/UIComponent.php";
+abstract class UIComponent extends STObject {
+    
+    protected $content;
+    protected $delegate;
+    
+    public function setDelegate($delegate) {
+        $this->delegate = $delegate;
+    }
+    
+    public function __construct($content) {
+        $this->content = $content;
+        $xml = simplexml_load_string($content);
+        foreach ($xml->attributes() as $key => $attribute) {
+            $this->$key = $attribute;
+        }
+    }
+    
+    abstract public function renderComponent();
 
-if (!function_exists('main'))
-    trigger_error("Application entry point function not found", E_USER_ERROR);
+}
 
-// Magic
-main(isset($args)?$argc:0, isset($argv)?$argv:array());
 ?>

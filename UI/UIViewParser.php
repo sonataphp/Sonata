@@ -170,11 +170,23 @@ class UIViewParser {
         return $result;
     }
     
-    public static function parse(&$delegate, $content) {
+    public static function componentParser($matches) {        
+        $componentName = $matches[1];
+        $content = str_replace(":".$componentName, "", $matches[0]);
+        $component = new $componentName($content);
+        $component->setDelegate(self::$delegate);
+        return $component->renderComponent();
+    }
+    
+    public static function parse($delegate, $content) {
         self::$delegate = $delegate;
         $content = preg_replace_callback("/\{\{(?:[a-z0-9\_\:\s\-\/\>]+)\}\}/i",
                                          array('UIViewParser', 'callback'),
                                          $content);
+        $content = preg_replace_callback('/<com:([a-z\d\_]{1,})(((?!(\/>|<\/com:([^>]*)>)).)*)(\/>|<\/com:([^>]*)>)/is',
+                                          array('UIViewParser', 'componentParser'),
+                                          $content);
+        
         return $content;
     }
     

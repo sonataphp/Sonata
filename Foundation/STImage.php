@@ -31,7 +31,7 @@ class STImage {
    * 		89 50 4e 47 => PNG
    * 		47 49 46 38 => GIF
    */
-   public static function fileIsImage($file, &$type = null) {
+   public static function fileIsImage($file, $type = null) {
            if (file_exists($file) && is_readable($file)) {
                    // image signatures
                    $imgSignatures = array('ffd8ffe0','ffd8ffe1', '89504e47','47494638');
@@ -57,7 +57,7 @@ class STImage {
            return false;
    }
    
-   public static function dataIsImage($data, &$type = null) {
+   public static function dataIsImage($data, $type = null) {
            // image signatures
            $imgSignatures = array('ffd8ffe0','ffd8ffe1', '89504e47','47494638');
            $imgTypes = array('ffd8ffe0' => IMAGETYPE_JPEG, 'ffd8ffe1' => IMAGETYPE_JPEG,

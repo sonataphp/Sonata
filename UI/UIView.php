@@ -35,7 +35,7 @@ class UIView extends STObject {
     private $scriptsOriginal = array();
     private $stylesOriginal = array();
     
-    public function init() { }
+    public function init() {}
     
     public function initWithDelegate(UIViewController $delegate) {
         $this->delegate($delegate)

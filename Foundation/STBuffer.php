@@ -17,7 +17,7 @@
 // limitations under the License.
 //
 
-class STBuffer extends STObject {
+class STBuffer {
     
     protected static $buffer = array();
     

@@ -34,36 +34,36 @@ class STFileManager extends STObject {
         file_put_contents($path, $contents, FILE_APPEND);
     }
     
-    public static function deleteFile($path) {
-        unlink($path);
+    public static function createFolder($path, $mode = 644) {
+        return mkdir($path, $mode, true);
     }
     
     public static function deleteFolder($path) {
-        rmdir($path);
+        return rmdir($path);
     }
     
-    public static function createFolder($path, $mode) {
-        mkdir($path, $mode, true);
+    public static function deleteFile($fileName) {
+        return unlink($fileName);
     }
     
     public static function copyFile($sourcePath, $destPath) {
-        copy($sourcePath, $destPath);
+        return copy($sourcePath, $destPath);
     }
     
     public static function moveFile($sourcePath, $destPath) {
-        rename($sourcePath, $destPath);
+        return rename($sourcePath, $destPath);
     }
     
     public static function changeMode($fileName, $mode) {
-        chmod($fileName, $mode);
+        return chmod($fileName, $mode);
     }
     
     public static function uploadFile($source, $dest) {
         return move_uploaded_file($source, $dest);
     }
     
-    public static function openFile($filePath) {
-        $file = new STFile($filePath);
+    public static function openFile($fileName) {
+        $file = new STFile($fileName);
         if ($file->exists())
             $file->read();
         return $file;

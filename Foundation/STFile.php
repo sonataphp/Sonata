@@ -22,6 +22,10 @@ class STFile extends STObject {
     private $fileName;
     public $data;
     
+    public function __construct($fileName) {
+        $this->fileName = $fileName;
+    }
+    
     public function getFullPath() {
         return $this->fileName;
     }
@@ -78,29 +82,25 @@ class STFile extends STObject {
         return $this->data;
     }
     
-    public function write($data, $path = '') {
+    public function write($data, $fileName = '') {
         $this->data = $data;
-        $this->save($path);
+        $this->save($fileName);
     }
     
-    public function save($path = '') {
-        return file_put_contents(($path == '')?$this->fileName:$path, $this->data);
+    public function save($fileName = '') {
+        return file_put_contents(($fileName == '')?$this->fileName:$fileName, $this->data);
     }
     
-    public function append($path = '') {
-        return file_put_contents(($path == '')?$this->fileName:$path, $this->data, FILE_APPEND);
+    public function append($fileName = '') {
+        return file_put_contents(($fileName == '')?$this->fileName:$fileName, $this->data, FILE_APPEND);
     }
     
     public function delete() {
-        @unlink($this->fileName);
+        return unlink($this->fileName);
     }
     
     public function exists() {
         return (bool) file_exists($this->fileName);
-    }
-    
-    public function __construct($fileName) {
-        $this->fileName = $fileName;
     }
     
 }

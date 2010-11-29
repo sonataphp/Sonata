@@ -71,7 +71,7 @@ class STInflector {
         '/s$/i'                     => ""
     );
     
-    static $irregular = array(
+    private static $irregular = array(
         'move'   => 'moves',
         'foot'   => 'feet',
         'goose'  => 'geese',
@@ -97,7 +97,7 @@ class STInflector {
     final private function __construct() {}
     final private function __clone() {}
     
-    public static function pluralize( $string ) {
+    public static function pluralize($string) {
         if (in_array(strtolower($string), self::$uncountable)) return $string;
         foreach (self::$irregular as $pattern => $result) {
             $pattern = '/'.$pattern.'$/i';
