@@ -15,7 +15,7 @@ class STValidate {
     final private function __clone() {}
 
 	/**
-	 * Validate email, commonly used characters only
+	 * Validates email, commonly used characters only
 	 *
 	 * @param   string   email address
 	 * @return  boolean
@@ -135,7 +135,7 @@ class STValidate {
 	 * @param   boolean  trigger UTF-8 compatibility
 	 * @return  boolean
 	 */
-	public static function alpha($str, $utf8 = FALSE) {
+	public static function alpha($str, $utf8 = TRUE) {
 		return ($utf8 === TRUE)
 			? (bool) preg_match('/^\pL++$/uD', (string) $str)
 			: ctype_alpha((string) $str);
@@ -148,7 +148,7 @@ class STValidate {
 	 * @param   boolean  trigger UTF-8 compatibility
 	 * @return  boolean
 	 */
-	public static function alphaNumeric($str, $utf8 = FALSE) {
+	public static function alphaNumeric($str, $utf8 = TRUE) {
 		return ($utf8 === TRUE)
 			? (bool) preg_match('/^[\pL\pN]++$/uD', (string) $str)
 			: ctype_alnum((string) $str);
@@ -161,7 +161,7 @@ class STValidate {
 	 * @param   boolean  trigger UTF-8 compatibility
 	 * @return  boolean
 	 */
-	public static function alphaDash($str, $utf8 = FALSE) {
+	public static function alphaDash($str, $utf8 = TRUE) {
 		return ($utf8 === TRUE)
 			? (bool) preg_match('/^[-\pL\pN_]++$/uD', (string) $str)
 			: (bool) preg_match('/^[-a-z0-9_]++$/iD', (string) $str);
@@ -174,7 +174,7 @@ class STValidate {
 	 * @param   boolean  trigger UTF-8 compatibility
 	 * @return  boolean
 	 */
-	public static function digit($str, $utf8 = FALSE) {
+	public static function digit($str, $utf8 = TRUE) {
 		return ($utf8 === TRUE)
 			? (bool) preg_match('/^\pN++$/uD', (string) $str)
 			: ctype_digit((string) $str);

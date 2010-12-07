@@ -34,6 +34,8 @@ class STCalendar {
     }
     
     public static function defaultTimezone() {
+        if (!self::$defaultTimezone)
+            throw new Exception('Default timezone is not defined.');
         putenv("TZ=".self::$defaultTimezone);
     }
     

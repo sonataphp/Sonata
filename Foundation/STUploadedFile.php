@@ -17,11 +17,11 @@
 // limitations under the License.
 //
 
-class STUploadedFile {
+class STUploadedFile extends STObject {
 	public $file, $name, $type, $size, $path, $error;
 
-	public function __construct($f){
-		$f = $_FILES[$f];
+	public function __construct($variableName) {
+		$f = $_FILES[$variableName];
 		$this->file = $f;
 		$this->name = $f['name'];
 		$this->type = $f['type'];
@@ -30,15 +30,15 @@ class STUploadedFile {
 		$this->error = $f['error'];
 	}
 
-	public function hasError(){
+	public function hasError() {
 		return $this->isUploaded() && $this->error != UPLOAD_ERR_OK;
 	}
 
-	public function isUploaded(){
+	public function isUploaded() {
 		return $this->error != UPLOAD_ERR_NO_FILE;
 	}
 
-	public function save($path){
+	public function save($path) {
 		return STFileManager::uploadFile($this->path, $path);
 	}
 }

@@ -63,19 +63,6 @@ abstract class ORModel implements Countable, Iterator {
     private $__leftJoin;
     private $_filtersEnabled = true;
     
-    public function __construct() {
-        $this->position = 0;
-    }
-
-    public function primaryKey() {
-        return ($this->_primaryKey)?$this->_primaryKey:"id";
-    }
-
-    
-    public function tableName() {
-        return ($this->_tableName)?$this->_tableName:strtolower(str_replace("Model", "", get_class($this)));
-    }
-    
     protected function postProcess($fieldName, $value) {
         return $value;
     }
@@ -87,30 +74,6 @@ abstract class ORModel implements Countable, Iterator {
         return $this;
     }
     
-    public function multipleMatch($delegate, $key, $foreignKey, $additionalQuery = '') {
-        $this->onCall($delegate, "WHERE `$foreignKey` IN ({".$key."}) ".$additionalQuery);
-        $this->__key = $key;
-        $this->__foreignKey = $foreignKey;
-        return $this;
-    }
-    
-    public function singleMatch($args) {
-        $args = func_get_args();
-        $this->__leftJoin = $args;
-    }
-    
-    public function onDuplicate($array) {
-        $this->__onduplicate = $array;
-    }
-    
-    public function enableFilters() {
-        $this->_filtersEnabled = true;
-    }
-    
-    public function disableFilters() {
-        $this->_filtersEnabled = false;
-    }
-    
     private function copyVariables($object) {
         if (!$vars = get_object_vars($this)) return $this;
         foreach ($vars as $key => $val) {
@@ -118,10 +81,6 @@ abstract class ORModel implements Countable, Iterator {
         }
         return $this;
     }
-    
-    /*private function describe() {
-        $this->vars = $this->describeModel($this);
-    }*/
     
     private function describeModel($model) {
         if (!$vars = get_object_vars($model)) return;
@@ -140,6 +99,15 @@ abstract class ORModel implements Countable, Iterator {
         return $_vars;
     }
     
+    private function prepareQueryParams($params) {
+        $params = ((count($params) == 1) && (is_array($params[0])))?$params[0]:$params;
+        $q = array_shift($params);
+        $params = array_map('ORQueryHelper::escape', $params);
+        ORQueryHelper::setupReplace($params);
+        $q = preg_replace_callback("/\?/", "ORQueryHelper::replaceParam", $q);
+        return $q;
+    }
+    
     private function findAttributeByObject($object) {
         if (!$vars = get_object_vars($this)) return;
         $class = get_class($object);
@@ -156,25 +124,6 @@ abstract class ORModel implements Countable, Iterator {
                 }
             } catch (Exception $e) { }
         }
-    }
-    
-    private function prepareQueryParams($params) {
-        $params = ((count($params) == 1) && (is_array($params[0])))?$params[0]:$params;
-        $q = array_shift($params);
-        $params = array_map('ORQueryHelper::escape', $params);
-        ORQueryHelper::setupReplace($params);
-        $q = preg_replace_callback("/\?/", "ORQueryHelper::replaceParam", $q);
-        return $q;
-    }
-    
-    public function first() {
-        $args = func_get_args();
-        if (count($args) == 1){
-            $this->all("WHERE ".$this->tableName().".".$this->primaryKey()." = '?' LIMIT 1", $args[0]);
-            return $this->copyVariables($this->data[0]);
-        }
-        $this->all($args);
-        return $this->copyVariables($this->data[0]);
     }
     
     protected function processResult($result) {
@@ -201,6 +150,56 @@ abstract class ORModel implements Countable, Iterator {
             }
             $this->data[] = $var;
         }
+    }
+    
+    public function __construct() {
+        $this->position = 0;
+    }
+
+    public function primaryKey() {
+        return ($this->_primaryKey)?$this->_primaryKey:"id";
+    }
+
+    
+    public function tableName() {
+        return ($this->_tableName)?$this->_tableName:strtolower(str_replace("Model", "", get_class($this)));
+    }
+    
+    public function multipleMatch($delegate, $key, $foreignKey, $additionalQuery = '') {
+        $this->onCall($delegate, "WHERE `$foreignKey` IN ({".$key."}) ".$additionalQuery);
+        $this->__key = $key;
+        $this->__foreignKey = $foreignKey;
+        return $this;
+    }
+    
+    public function singleMatch($args) {
+        $args = func_get_args();
+        $this->__leftJoin = $args;
+    }
+    
+    public function onDuplicate($array) {
+        $this->__onduplicate = $array;
+        return $this;
+    }
+    
+    public function enableFilters() {
+        $this->_filtersEnabled = true;
+        return $this;
+    }
+    
+    public function disableFilters() {
+        $this->_filtersEnabled = false;
+        return $this;
+    }
+    
+    public function first() {
+        $args = func_get_args();
+        if (count($args) == 1){
+            $this->all("WHERE ".$this->tableName().".".$this->primaryKey()." = '?' LIMIT 1", $args[0]);
+            return $this->copyVariables($this->data[0]);
+        }
+        $this->all($args);
+        return $this->copyVariables($this->data[0]);
     }
     
     public function all() {

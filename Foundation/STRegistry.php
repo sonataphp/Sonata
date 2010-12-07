@@ -17,7 +17,7 @@
 // limitations under the License.
 //
 
-class STRegistry extends STObject {
+class STRegistry {
     
     private static $_settings;
     
@@ -29,12 +29,16 @@ class STRegistry extends STObject {
         STCookie::initWithRegistry();
     }
     
-    public static function get($value) {
-        return self::$_settings[$value];
+    public static function get($key) {
+        return self::$_settings[$key];
     }
     
     public static function set($key, $value) {
         self::$_settings[$key] = $value;
+    }
+    
+    public static function keyExists($key) {
+        return isset(self::$_settings[$key]);
     }
 }
 

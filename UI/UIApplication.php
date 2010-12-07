@@ -86,9 +86,9 @@ class UIApplication extends STObject {
         $class = get_called_class();
 
         if(!self::$delegate) {
-            self::$delegate = new $class();
+            self::setDelegate(new $class());
         }
-        return self::$delegate;
+        return self::getDelegate();
     }
 	
 	public function isSSL() {
@@ -100,15 +100,24 @@ class UIApplication extends STObject {
 	}
 	
 	public function sendHeader($header) {
-		header($header);
+		if (!is_array($header) && !is_string($header))
+			throw new Exception("Unknown type of header is being attempted to send.");
+		
+		if (is_string($header)) 
+			header($header);
+		
+		if (is_array($header))
+			foreach ($header as $headerElement) {
+				header($headerElement);
+			}
 	}
     
-    public function settingsFromObject($data) {
-		$this->settings->applicationTitle = $data['Application']['Title'];
-		$this->settings->applicationEnvironment = $data['Application']['Environment'];
-		$this->settings->iconFile = $data['Application']['Icon file'];
-		$this->settings->timeZone = $data['Application']['Timezone'];
-		$envOptions = new STArray($data['Configurations'][$this->settings->applicationEnvironment]);
+    public function settingsFromObject(STDictionary $dictionary) {
+		$this->settings->applicationTitle = $dictionary['Application']['Title'];
+		$this->settings->applicationEnvironment = $dictionary['Application']['Environment'];
+		$this->settings->iconFile = $dictionary['Application']['Icon file'];
+		$this->settings->timeZone = $dictionary['Application']['Timezone'];
+		$envOptions = new STArray($dictionary['Configurations'][$this->settings->applicationEnvironment]);
 		$options = $envOptions->toObject();
 		$this->settings->environment = $envOptions->toObject();
 		$this->settings->paths = new UIApplicationSettingsPaths();

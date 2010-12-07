@@ -2,7 +2,7 @@
 //  STFeed.php
 //  Sonata/Foundation
 //
-// Copyright 2010 JAnis uddin Ahmad <anisniit@gmail.com>
+// Copyright 2008 Anis uddin Ahmad <anisniit@gmail.com>
 //
 // Modified to fit Sonata Framework syntax standards by Roman Efimov <romefimov@gmail.com>
 //
@@ -29,7 +29,7 @@ class STFeedItem {
      *
      * @param    contant     (RSS1/RSS2/ATOM) RSS2 is default.
      */
-    function __construct($version = RSS2) {
+    public function __construct($version = RSS2) {
         $this->version = $version;
     }
     
@@ -37,8 +37,8 @@ class STFeedItem {
      * Add an element to elements array
      *
      * @access   public
-     * @param    srting  The tag name of an element
-     * @param    srting  The content of tag
+     * @param    string  The tag name of an element
+     * @param    string  The content of tag
      * @param    array   Attributes(if any) in 'attrName' => 'attrValue' format
      * @return   void
      */
@@ -77,7 +77,7 @@ class STFeedItem {
     // Wrapper functions ------------------------------------------------------
     
     /**
-     * Set the 'dscription' element of feed item
+     * Set the 'description' element of feed item
      *
      * @access   public
      * @param    string  The content of 'description' element
@@ -165,7 +165,7 @@ define('RSS1', 'RSS 1.0', true);
 define('RSS2', 'RSS 2.0', true);
 define('ATOM', 'ATOM', true);
 
-class STFeedWriter {
+class STFeedWriter extends STObject {
     // Collection of channel elements
     private $channels = array();
     // Collection of items as object of STFeedItem class.
@@ -198,7 +198,7 @@ class STFeedWriter {
     /**
      * Set a channel element
      * @access   public
-     * @param    srting  name of the channel tag
+     * @param    string  name of the channel tag
      * @param    string  content of the channel tag
      * @return   void
      */
@@ -255,8 +255,8 @@ class STFeedWriter {
      * @param    object  instance of STFeedItem class
      * @return   void
      */
-    public function addItem($STFeedItem) {
-        $this->items[] = $STFeedItem;
+    public function addItem($feedItem) {
+        $this->items[] = $feedItem;
     }
     
     
@@ -266,7 +266,7 @@ class STFeedWriter {
      * Set the 'title' channel element
      *
      * @access   public
-     * @param    srting  value of 'title' channel tag
+     * @param    string  value of 'title' channel tag
      * @return   void
      */
     public function setTitle($title) {
@@ -277,7 +277,7 @@ class STFeedWriter {
      * Set the 'description' channel element
      *
      * @access   public
-     * @param    srting  value of 'description' channel tag
+     * @param    string  value of 'description' channel tag
      * @return   void
      */
     public function setDescription($desciption) {
@@ -288,7 +288,7 @@ class STFeedWriter {
      * Set the 'link' channel element
      *
      * @access   public
-     * @param    srting  value of 'link' channel tag
+     * @param    string  value of 'link' channel tag
      * @return   void
      */
     public function setLink($link) {
@@ -299,9 +299,9 @@ class STFeedWriter {
      * Set the 'image' channel element
      *
      * @access   public
-     * @param    srting  title of image
-     * @param    srting  link url of the imahe
-     * @param    srting  path url of the image
+     * @param    string  title of image
+     * @param    string  link url of the image
+     * @param    string  path url of the image
      * @return   void
      */
     public function setImage($title, $link, $url) {
@@ -312,7 +312,7 @@ class STFeedWriter {
      * Set the 'about' channel element. Only for RSS 1.0
      *
      * @access   public
-     * @param    srting  value of 'about' channel tag
+     * @param    string  value of 'about' channel tag
      * @return   void
      */
     public function setChannelAbout($url) {
@@ -386,7 +386,7 @@ class STFeedWriter {
      * Creates a single node as xml format
      *
      * @access   private
-     * @param    srting  name of the tag
+     * @param    string  name of the tag
      * @param    mixed   tag value as string or array of nested tags in 'tagName' => 'tagValue' format
      * @param    array   Attributes(if any) in 'attrName' => 'attrValue' format
      * @return   string  formatted xml tag
@@ -485,7 +485,7 @@ class STFeedWriter {
      * Make the starting tag of channels
      *
      * @access   private
-     * @param    srting  The vale of about tag which is used for only RSS 1.0
+     * @param    string  The vale of about tag which is used for only RSS 1.0
      * @return   void
      */
     private function startItem($about = false) {
