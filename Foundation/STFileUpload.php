@@ -1,5 +1,5 @@
 <?
-//  STUploadedFile.php
+//  STFileUpload.php
 //  Sonata/Foundation
 //
 // Copyright 2010 Roman Efimov <romefimov@gmail.com>
@@ -17,7 +17,7 @@
 // limitations under the License.
 //
 
-class STUploadedFile extends STObject {
+class STFileUpload extends STObject {
 	public $file, $name, $type, $size, $path, $error;
 
 	public function __construct($variableName) {

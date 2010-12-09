@@ -44,7 +44,7 @@ require_once "Foundation/STInflector.php";
 require_once "Foundation/STDictionary.php";
 require_once "Foundation/STRouter.php";
 require_once "Foundation/STProfiler.php";
-require_once "Foundation/STUploadedFile.php";
+require_once "Foundation/STFileUpload.php";
 require_once "Foundation/STValidate.php";
 require_once "Foundation/STRegistry.php";
 require_once "Foundation/STCalendar.php";

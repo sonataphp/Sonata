@@ -24,7 +24,7 @@ class UIViewControllerException extends UI404Error {}
 class UIViewController extends STObject {
     
     public $view = null;
-    public $defaultViewPath = 'PHTMLs/';
+    public $defaultTemplatesPath = 'PHTMLs/';
     public $params;
     public $action;
     private $_isViewLoaded = false;
@@ -45,7 +45,7 @@ class UIViewController extends STObject {
             if (UIViewCache::isCached($fileName)) {
                 $this->attachSubview(UIViewCache::getTemplate($fileName));
             } else {
-                $this->attachSubview($this->defaultViewPath.$fileName.".phtml");
+                $this->attachSubview($this->defaultTemplatesPath.$fileName.".phtml");
             }
             $partial = ob_get_clean();
             $compiled .= $partial;

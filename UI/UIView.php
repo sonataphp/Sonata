@@ -247,7 +247,7 @@ class UIView extends STObject {
                 $args = func_get_args();
                 if (!$args) trigger_error(__("No subviews to add"), E_USER_ERROR);
                 foreach ($args as $arg)
-                    $this->delegate->attachSubview($this->delegate->defaultViewPath.$arg.".phtml");
+                    $this->delegate->attachSubview($this->delegate->defaultTemplatesPath.$arg.".phtml");
             }
         if (method_exists($this, 'didAddSubview'))
             $this->didAddSubView(func_get_args());
