@@ -1,4 +1,4 @@
-<?
+<?php
 //  UIAjaxController.php
 //  Sonata/UI
 //

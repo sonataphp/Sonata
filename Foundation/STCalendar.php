@@ -1,4 +1,4 @@
-<?
+<?php
 //  STCalendar.php
 //  Sonata/Foundation
 //

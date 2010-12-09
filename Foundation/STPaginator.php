@@ -1,4 +1,4 @@
-<?
+<?php
 //  STPaginator.php
 //  Sonata/Foundation
 //

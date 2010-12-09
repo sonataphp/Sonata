@@ -1,4 +1,4 @@
-<?
+<?php
 //  UIMinifierViewController.php
 //  Sonata/UI
 //

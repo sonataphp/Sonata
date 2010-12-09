@@ -1,4 +1,4 @@
-<?
+<?php
 //  CFTimezoneTable.php
 //  Sonata/CoreFoundation
 //

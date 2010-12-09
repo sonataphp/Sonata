@@ -1,4 +1,4 @@
-<?
+<?php
 //  DB.php
 //  Sonata/Database
 //

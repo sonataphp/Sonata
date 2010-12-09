@@ -1,4 +1,4 @@
-<?
+<?php
 //  STLocale.php
 //  Sonata/Foundation
 //

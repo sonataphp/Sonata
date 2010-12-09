@@ -1,4 +1,4 @@
-<?
+<?php
 //  STRegistry.php
 //  Sonata/Foundation
 //

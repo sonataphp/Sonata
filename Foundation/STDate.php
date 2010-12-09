@@ -1,4 +1,4 @@
-<?
+<?php
 //  STDate.php
 //  Sonata/Foundation
 //

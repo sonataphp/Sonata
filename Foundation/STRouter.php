@@ -1,4 +1,4 @@
-<?
+<?php
 //  STRouter.php
 //  Sonata/Foundation
 //

@@ -1,4 +1,4 @@
-<?
+<?php
 //  STMail.php
 //  Sonata/Foundation
 //

@@ -1,4 +1,4 @@
-<?
+<?php
 //  STArray.php
 //  Sonata/Foundation
 //

@@ -1,4 +1,4 @@
-<?
+<?php
 //  STFile.php
 //  Sonata/Foundation
 //

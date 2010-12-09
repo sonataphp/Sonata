@@ -1,4 +1,4 @@
-<?
+<?php
 //  STRequest.php
 //  Sonata/Foundation
 //

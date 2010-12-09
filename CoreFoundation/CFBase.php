@@ -1,4 +1,4 @@
-<?
+<?php
 //  CFBase.php
 //  Sonata/CoreFoundation
 //

@@ -1,4 +1,4 @@
-<?
+<?php
 //  STNotificationCenter.php
 //  Sonata/Foundation
 //

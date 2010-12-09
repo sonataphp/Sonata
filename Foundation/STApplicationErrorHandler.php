@@ -1,4 +1,4 @@
-<?
+<?php
 //  STApplicationErrorHandler.php
 //  Sonata/Foundation
 //

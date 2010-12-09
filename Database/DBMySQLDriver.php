@@ -1,4 +1,4 @@
-<?
+<?php
 //  DBMySQLDriver.php
 //  Sonata/Database
 //

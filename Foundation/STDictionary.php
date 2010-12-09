@@ -1,4 +1,4 @@
-<?
+<?php
 //  STDictionary.php
 //  Sonata/Foundation
 //

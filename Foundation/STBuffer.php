@@ -1,4 +1,4 @@
-<?
+<?php
 //  STBuffer.php
 //  Sonata/Foundation
 //

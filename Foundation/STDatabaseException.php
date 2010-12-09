@@ -1,4 +1,4 @@
-<?
+<?php
 //  STDatabaseException.php
 //  Sonata/Foundation
 //

@@ -1,4 +1,4 @@
-<?
+<?php
 //  STExceptionHandler.php
 //  Sonata/Foundation
 //
@@ -387,7 +387,7 @@ class STExceptionHandler extends STObject {
                                 <?php endforeach ?>
                         </div>
                 </div>
-                <?
+                <?php
                 echo ob_get_clean();
 
                 return TRUE;

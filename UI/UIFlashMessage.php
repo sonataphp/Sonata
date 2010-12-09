@@ -1,4 +1,4 @@
-<?
+<?php
 //  UIFlashMessage.php
 //  Sonata/UI
 //

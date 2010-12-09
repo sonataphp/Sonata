@@ -1,4 +1,4 @@
-<?
+<?php
 //  STFileUpload.php
 //  Sonata/Foundation
 //

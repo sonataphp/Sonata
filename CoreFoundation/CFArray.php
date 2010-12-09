@@ -1,4 +1,4 @@
-<?
+<?php
 //  CFArray.php
 //  Sonata/CoreFoundation
 //

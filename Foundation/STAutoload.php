@@ -1,4 +1,4 @@
-<?
+<?php
 //  STAutoload.php
 //  Sonata/Foundation
 //

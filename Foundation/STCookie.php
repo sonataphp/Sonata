@@ -1,4 +1,4 @@
-<?
+<?php
 //  STCookie.php
 //  Sonata/Foundation
 //

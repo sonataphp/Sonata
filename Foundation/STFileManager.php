@@ -1,4 +1,4 @@
-<?
+<?php
 //  STFileManager.php
 //  Sonata/Foundation
 //

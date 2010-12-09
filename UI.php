@@ -1,4 +1,4 @@
-<?
+<?php
 //  UI.php
 //  Sonata/UI
 //

@@ -1,4 +1,4 @@
-<?
+<?php
 //  STValidate.php
 //  Sonata/Foundation
 //

@@ -1,4 +1,4 @@
-<?
+<?php
 //  Foundation.php
 //  Sonata/Foundation
 //

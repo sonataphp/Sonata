@@ -347,7 +347,7 @@ class STFeedWriter extends STObject {
      * @return   void
      */
     private function printHead() {
-        $out = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
+        $out = '<?phpxml version="1.0" encoding="utf-8"?>' . "\n";
         
         if ($this->version == RSS2) {
             $out .= '<rss version="2.0"

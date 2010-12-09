@@ -1,4 +1,4 @@
-<?
+<?php
 //  UIApplicationError.php
 //  Sonata/UI
 //
