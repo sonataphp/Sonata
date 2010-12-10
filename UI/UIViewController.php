@@ -29,6 +29,10 @@ class UIViewController extends STObject {
     public $action;
     private $_isViewLoaded = false;
     
+    public function __construct() {
+        $this->init();
+    }
+    
     // Creating Instances
     public function init() {
         
