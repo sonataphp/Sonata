@@ -42,8 +42,8 @@ class UIView extends STObject {
              ->init();
     }
     
-    public function initWithPhtmlNames($phtml) {
-        $this->addSubview($phtml)
+    public function initWithPhtmlNames($phtmls) {
+        $this->addSubview(func_get_args())
              ->init();
     }
     
@@ -75,7 +75,7 @@ class UIView extends STObject {
     }
     
     public function delegate($delegate) {
-        $this->delegate = &$delegate;
+        $this->delegate = $delegate;
         return $this;
     }
 
@@ -152,24 +152,24 @@ class UIView extends STObject {
         return $this;
     }
     
-    public function getStyles() {
-        return $this->styles;
-    }
-    
-    public function getStylesIE6() {
-        return $this->stylesIE6;
-    }
-    
-    public function getStylesIE7() {
-        return $this->stylesIE7;
-    }
-    
-    public function getStylesIE67() {
-        return $this->stylesIE67;
-    }
-    
-    public function getStylesIEAll() {
-        return $this->stylesIEAll;
+    public function getStylesForBrowser($type = UIViewStylesAnyBrowser) {
+        switch ($type) {
+            case UIViewStylesAnyBrowser:
+                return $this->styles;
+                break;
+            case UIViewStylesIE6:
+                return $this->stylesIE6;
+                break;
+            case UIViewStylesIE7:
+                return $this->stylesIE7;
+                break;
+            case UIViewStylesIE67:
+                return $this->stylesIE67;
+                break;
+            case UIViewStylesIEAll:
+                return $this->stylesIEAll;
+                break;
+        }
     }
     
     private function parseScriptsArgs($args) {
@@ -242,23 +242,26 @@ class UIView extends STObject {
     }
     
     public function addSubview($phtml = array()) {
+        $subviews = func_get_args();
+        if ((count($subviews) == 1) && is_array($phtml))
+            $subviews = $phtml;
         if (!$this->delegate->isViewLoaded())
-            $this->subviews = array_merge($this->subviews, func_get_args()); else {
-                $args = func_get_args();
+            $this->subviews = array_merge($this->subviews, $subviews); else {
+                $args = $subviews;
                 if (!$args) trigger_error(__("No subviews to add"), E_USER_ERROR);
                 foreach ($args as $arg)
                     $this->delegate->attachSubview($this->delegate->defaultTemplatesPath.$arg.".phtml");
             }
         if (method_exists($this, 'didAddSubview'))
-            $this->didAddSubView(func_get_args());
+            $this->didAddSubView($subviews);
         return $this;
     }
     
     // alias for addSubview
-    public function setLayout($phtml) {
+    public function setLayout($phtml = array()) {
         $phtml = func_get_args();
-        $this->subviews = $phtml;
-        $this->addSubview();
+        $this->subviews = array();
+        $this->addSubview($phtml);
         return $this;
     }
     

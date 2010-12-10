@@ -49,10 +49,6 @@ class UIViewParser {
                 $result = self::$delegate->view->title;
                 break;
             
-            case "{{pageTitle}}":
-                $result = self::$delegate->view->title;
-                break;
-            
             case "{{favicon}}":     
                 $result = '<link rel="icon" href="'.UIApplication::sharedApplication()->settings->iconFile.'" type="image/x-icon" />'."\r\n".
                           '<link rel="shortcut icon" href="'.UIApplication::sharedApplication()->settings->iconFile.'" type="image/x-icon" />';
@@ -94,55 +90,55 @@ class UIViewParser {
                 break;
             
             case "{{styles}}":
-                if (!self::$delegate->view->styles) {
+                if (!self::$delegate->view->getStylesForBrowser(UIViewStylesAnyBrowser)) {
                     $result = '';
                     break;
                 }
-                foreach (self::$delegate->view->styles as $style) {
+                foreach (self::$delegate->view->getStylesForBrowser(UIViewStylesAnyBrowser) as $style) {
                     $data[] = '<link rel="stylesheet" href="'.$style['src'].'" media="'.self::determineCssMedia($style['type']).'" type="text/css" />';
                 }
                 $result = implode("\r\n", $data);
                 break;
             
             case "{{ie6styles}}":
-                if (!self::$delegate->view->getStylesIE6()) {
+                if (!self::$delegate->view->getStylesForBrowser(UIViewStylesIE6)) {
                     $result = '';
                     break;
                 }
-                foreach (self::$delegate->view->getStylesIE6() as $style) {
+                foreach (self::$delegate->view->getStylesForBrowser(UIViewStylesIE6) as $style) {
                     $data[] = '<link rel="stylesheet" href="'.$style['src'].'" media="'.self::determineCssMedia($style['type']).'" type="text/css" />';
                 }
                 $result = implode("\r\n", $data);
                 break;
             
             case "{{ie7styles}}":
-                if (!self::$delegate->view->getStylesIE7()) {
+                if (!self::$delegate->view->getStylesForBrowser(UIViewStylesIE7)) {
                     $result = '';
                     break;
                 }
-                foreach (self::$delegate->view->getStylesIE7() as $style) {
+                foreach (self::$delegate->view->getStylesForBrowser(UIViewStylesIE7) as $style) {
                     $data[] = '<link rel="stylesheet" href="'.$style['src'].'" media="'.self::determineCssMedia($style['type']).'" type="text/css" />';
                 }
                 $result = implode("\r\n", $data);
                 break;
             
             case "{{ie67styles}}":
-                if (!self::$delegate->view->getStylesIE67()) {
+                if (!self::$delegate->view->getStylesForBrowser(UIViewStylesIE67)) {
                     $result = '';
                     break;
                 }
-                foreach (self::$delegate->view->getStylesIE67() as $style) {
+                foreach (self::$delegate->view->getStylesForBrowser(UIViewStylesIE67) as $style) {
                     $data[] = '<link rel="stylesheet" href="'.$style['src'].'" media="'.self::determineCssMedia($style['type']).'" type="text/css" />';
                 }
                 $result = implode("\r\n", $data);
                 break;
             
             case "{{ieallstyles}}":
-                if (!self::$delegate->view->getStylesIEAll()) {
+                if (!self::$delegate->view->getStylesForBrowser(UIViewStylesIEAll)) {
                     $result = '';
                     break;
                 }
-                foreach (self::$delegate->view->getStylesIEAll() as $style) {
+                foreach (self::$delegate->view->getStylesForBrowser(UIViewStylesIEAll) as $style) {
                     $data[] = '<link rel="stylesheet" href="'.$style['src'].'" media="'.self::determineCssMedia($style['type']).'" type="text/css" />';
                 }
                 $result = implode("\r\n", $data);

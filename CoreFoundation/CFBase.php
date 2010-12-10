@@ -66,6 +66,14 @@ if (!function_exists('get_called_class')) {
 }
 
 /*
+ *  Returns framework version
+ * 
+ */
+function CFSonataVersion() {
+    return '1.0';
+}
+
+/*
  *  CoreFoundation function to append include path (OS independent).
  *
  *  @param string $path Path to append.
