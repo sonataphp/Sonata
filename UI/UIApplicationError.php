@@ -19,8 +19,9 @@
 
 class UIApplicationError extends Exception {
 	
-	public function __construct($delegate, $action = 'indexAction', $errorCode = null, $errorMessage = '') {
+	public function __construct($delegate, $action = 'index', $errorCode = null, $errorMessage = '') {
 		$controller = new $delegate;
+		$action .= "Action";
 		$controller->$action();
 		if ($errorCode) STProfiler::exception($errorCode.' Exception Caught');
         
@@ -33,8 +34,8 @@ class UIApplicationError extends Exception {
 
 class UI404Error extends UIApplicationError {
 	
-    public function __construct($e = '') {
-        parent::__construct("E404ViewController", "indexAction", 404, $e);
+    public function __construct($errorMessage = '') {
+        parent::__construct("E404ViewController", "index", 404, $errorMessage);
     }
 	
 }

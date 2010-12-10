@@ -17,17 +17,23 @@
 // limitations under the License.
 //
 
+define ("NOTICE", 1);
+define ("UIFlashNotice", 1);
+
 class UIFlashMessage {
-        static function set($msg, $type = NOTICE) {
-              //  if ($type == NOTICE) self::clear(ERROR);
+        
+        final private function __construct() {}
+        final private function __clone() {}
+        
+        public static function set($msg, $type = UIFlashNotice) {
                 $_SESSION['flash'.$type] = $msg;
         }
         
-        static function clear($type) {
+        public static function clear($type) {
                 unset($_SESSION['flash'.$type]);
         }
         
-        static function get($type, $before = '', $after = '') {
+        public static function get($type, $before = '', $after = '') {
                 if ($_SESSION['flash'.$type]) {
                         $msg = $_SESSION['flash'.$type];
                         unset($_SESSION['flash'.$type]);

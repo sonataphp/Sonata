@@ -20,6 +20,9 @@
 class STFileCache {
     const DEFAULT_TTL = 86400; // one day
     private static $dir, $prefix;
+    
+    final private function __construct() {}
+    final private function __clone() {}
   
     public static function configure($savedir='/tmp', $prefix='') {
         self::$dir = $savedir;
