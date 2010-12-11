@@ -27,6 +27,7 @@ class UIViewController extends STObject {
     public $defaultTemplatesPath = 'PHTMLs/';
     public $params;
     public $action;
+    public $controllerName;
     private $_isViewLoaded = false;
     
     public function __construct() {
