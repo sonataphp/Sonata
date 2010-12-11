@@ -23,7 +23,7 @@ class UIViewCache extends STFileCache {
     
     public static function cacheTemplates($args) {
         self::$templates = func_get_args();
-        self::configure(CFAppPath."Cache/Templates/");
+        self::configure(CFAppPath."Cache/Templates");
     }
     
     private function inTemplates($template) {
@@ -49,8 +49,16 @@ class UIViewCache extends STFileCache {
         return self::keyFile($templateFile);
     }
     
-    public static function isCached($file) {
-        return (self::exists($file));
+    public static function isCached($template) {
+        return (self::exists($template));
+    }
+    
+    public static function removeFromCache($template) {
+        self::configure(CFAppPath."Cache/Templates");
+        if (!STFileCache::exists($template)) return false;
+        $file = self::keyFile($templateFile);
+        unlink($file);
+        return true;
     }
     
     public static function flush() {
