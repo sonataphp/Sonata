@@ -19,6 +19,7 @@
 
 define ("NOTICE", 1);
 define ("UIFlashNotice", 1);
+define ("UIFlashError", 2);
 
 class UIFlashMessage {
         
@@ -31,6 +32,10 @@ class UIFlashMessage {
         
         public static function clear($type) {
                 unset($_SESSION['flash'.$type]);
+        }
+        
+        public static function exists($type) {
+                return isset($_SESSION['flash'.$type]);
         }
         
         public static function get($type, $before = '', $after = '') {
