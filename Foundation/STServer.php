@@ -39,6 +39,11 @@ class STServer extends STObject {
         return isset($_SERVER[$param])?$_SERVER[$param]:"";
     }
     
+    public static function subdomain() {
+        list($subdomain, $rest) = explode('.', $_SERVER['SERVER_NAME'], 2);
+        return $subdomain;
+    }
+    
     public static function init() {
         if (!isset($_SERVER)) return null;
         $record = new STServerInfoRecord();
