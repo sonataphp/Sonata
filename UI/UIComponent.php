@@ -17,7 +17,7 @@
 // limitations under the License.
 //
 
-abstract class UIComponent extends STObject {
+abstract class UIComponent extends UIViewController {
     
     protected $content;
     protected $delegate;
