@@ -40,7 +40,7 @@ class STServer extends STObject {
     }
     
     public static function subdomain() {
-        list($subdomain, $rest) = explode('.', $_SERVER['SERVER_NAME'], 2);
+        list($subdomain, $rest) = explode('.', $_SERVER['HTTP_HOST'], 2);
         return $subdomain;
     }
     

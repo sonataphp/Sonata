@@ -26,6 +26,7 @@ class STCalendar {
     
     public static function setDefaultTimezone($timezone) {
         self::$defaultTimezone = $timezone;
+        date_default_timezone_set($timezone);
         putenv("TZ=".$timezone);
     }
     
