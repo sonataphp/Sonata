@@ -22,6 +22,7 @@ function UIApplicationMain($argc = 0, $argv = array(), $app) {
     STServer::init();
     STSession::create();
     STFileCache::configure(CFAppPath."Cache/");
+    STCalendar::defaultTimezone("Etc/GMT");
     $applicationDelegate = strval($app);
     $applicationDelegate::sharedApplication()->arguments = $argv;
     $applicationDelegate::sharedApplication()->applicationWillRun();
