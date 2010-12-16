@@ -40,11 +40,13 @@ class UIView extends STObject {
     public function initWithDelegate(UIViewController $delegate) {
         $this->delegate($delegate)
              ->init();
+        return $this;
     }
     
     public function initWithPhtmlNames($phtmls) {
         $this->addSubview(func_get_args())
              ->init();
+        return $this;
     }
     
     public function setTitle($title) {
