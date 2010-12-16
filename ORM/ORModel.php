@@ -283,6 +283,20 @@ abstract class ORModel implements Countable, Iterator {
         return $this;
     }
     
+    public function delete($args) {
+        $ids = func_get_args();
+        if (is_array($args)) $ids = $args;
+        if (!$ids) throw new Exception("This functions expects at least one record ID.");
+        $newIds = array();
+        foreach ($ids as $id) {
+            if (intval($id) == $id) $newIds[] = intval($id); else
+                $newIds[] = "'".ORQueryHelper::escape(trim($id))."'";
+        }
+        $newIds = implode(", ", $newIds);
+        $query = "DELETE FROM `".$this->tableName().'` WHERE `'.$this->primaryKey().'` IN ('.$newIds.')';
+        DB::query($query);
+    }
+    
     public function rewind() {
         if ($this->awaitingCall) {
             $keys = array();
