@@ -29,6 +29,7 @@ class UIViewController extends STObject {
     public $action;
     public $controllerName;
     private $_isViewLoaded = false;
+    private $bindedMethod = array();
     
     public function __construct() {
         
@@ -37,6 +38,15 @@ class UIViewController extends STObject {
     // Creating Instances
     public function init() {
         
+    }
+    
+    public function bindMethod($method) {
+        if ($method == '__execute') {
+            $method = $this->bindedMethod;
+            if ($method instanceof Closure)
+                return $method($this);
+        }
+        $this->bindedMethod = $method;
     }
     
     public function bufferizeTemplates() {
@@ -99,6 +109,7 @@ class UIViewController extends STObject {
         $controller->view = $this->view;
         $controller->init();
         $controller->$action();
+        $controller->bindMethod("__execute");
     }
     
 }
