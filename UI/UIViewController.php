@@ -31,7 +31,7 @@ class UIViewController extends STObject {
     private $_isViewLoaded = false;
     
     public function __construct() {
-        $this->init();
+        
     }
     
     // Creating Instances
@@ -97,6 +97,7 @@ class UIViewController extends STObject {
         $controller->action = $this->action;
         $controller->params = $this->params;
         $controller->view = $this->view;
+        $controller->init();
         $controller->$action();
     }
     

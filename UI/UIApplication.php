@@ -173,6 +173,7 @@ class UIApplication extends STObject {
 		$c->controllerName = $router::controller();
         if (!method_exists($c, $action))
             throw new UIViewControllerException(__(sprintf("Action method '%s' is not present in controller '%s'", $action, $controller)));
+		$c->init();
         $c->$action();
     }
 }

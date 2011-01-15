@@ -618,10 +618,16 @@ class STExceptionHandler extends STObject {
     }
 }
 
-CFErrorReporting(0, 1);
-CFErrorHandlingSet('STExceptionHandler', 'errorHandler');
-CFExceptionHandlingSet('STExceptionHandler', 'exceptionHandler');
-CFShutdownFunction('STExceptionHandler', 'shutdownHandler');
-STNotificationCenter::addObserver("STCriticalException", "STApplicationErrorHandler", "criticalException");
-STNotificationCenter::addObserver("STStandardException", "STApplicationErrorHandler", "standardException");
+if (defined("CFStandardExceptionHandler") && CFStandardExceptionHandler == 'YES') {
+	error_reporting(E_ALL);
+	ini_set('display_errors', '1');
+} else {
+	CFErrorReporting(0, 1);
+	CFErrorHandlingSet('STExceptionHandler', 'errorHandler');
+	CFExceptionHandlingSet('STExceptionHandler', 'exceptionHandler');
+	CFShutdownFunction('STExceptionHandler', 'shutdownHandler');
+	STNotificationCenter::addObserver("STCriticalException", "STApplicationErrorHandler", "criticalException");
+	STNotificationCenter::addObserver("STStandardException", "STApplicationErrorHandler", "standardException");
+}
+
 ?>

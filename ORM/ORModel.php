@@ -37,7 +37,7 @@ class ORQueryHelper {
     
     public static function replaceParam($s) {
         $val = self::$params[self::$increment];
-        $result = ($val == intval($val))?$val:"'$val'";
+        $result = DB::escape($val);
         if ($result == '') $result = 0;
         self::$increment++;
         return $result;
