@@ -174,8 +174,9 @@ class UIApplication extends STObject {
         if (!method_exists($c, $action))
             throw new UIViewControllerException(__(sprintf("Action method '%s' is not present in controller '%s'", $action, $controller)));
 		$c->init();
+		$c->bindMethod("__execute", "before");
 		$c->$action();
-		$c->bindMethod("__execute");
+		$c->bindMethod("__execute", "after");
     }
 }
 

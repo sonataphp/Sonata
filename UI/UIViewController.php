@@ -40,13 +40,18 @@ class UIViewController extends STObject {
         
     }
     
-    public function bindMethod($method) {
+    public function bindMethod($method, $type = 'after') {
         if ($method == '__execute') {
-            $method = $this->bindedMethod;
-            if ($method instanceof Closure)
-                return $method($this);
+            if (count($this->bindedMethod) == 0) return;
+            foreach ($this->bindedMethod as $bindedMethod) {
+                if ($bindedMethod['type'] != $type) continue;
+                $method = $bindedMethod['method'];
+                if ($method instanceof Closure)
+                    $method($this);
+                }
+            return;
         }
-        $this->bindedMethod = $method;
+        $this->bindedMethod[] = array("method" => $method, "type" =>$type);
     }
     
     public function bufferizeTemplates() {
@@ -108,8 +113,9 @@ class UIViewController extends STObject {
         $controller->params = $this->params;
         $controller->view = $this->view;
         $controller->init();
+        $controller->bindMethod("__execute", "before");
         $controller->$action();
-        $controller->bindMethod("__execute");
+        $controller->bindMethod("__execute", "after");
     }
     
 }
