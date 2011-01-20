@@ -79,6 +79,16 @@ class UIViewController extends STObject {
     }
     
     public function attachSubview($fileName) {
+        $reflector = new ReflectionClass($this);
+        $properties = $reflector->getProperties();
+        $vars = array();
+        if ($properties)
+            foreach ($properties as $property) {
+                $name = $property->name;
+                $vars[$name] = $this->$name;
+            }
+        if ($vars)
+            extract($vars);
         require $fileName;
     }
     
