@@ -146,6 +146,51 @@ class STExceptionHandler extends STObject {
             return $output;
     }
     
+	public static function debugSourcePlain($file, $line_number, $padding = 5) {
+        
+        if ( ! $file OR ! is_readable($file)) {
+                // Continuing will cause errors
+                return FALSE;
+        }
+
+        // Open the file and set the line position
+        $file = fopen($file, 'r');
+        $line = 0;
+
+        // Set the reading range
+        $range = array('start' => $line_number - $padding, 'end' => $line_number + $padding);
+
+        // Set the zero-padding amount for line numbers
+        $format = '% '.strlen($range['end']).'d';
+
+        $source = '';
+        while (($row = fgets($file)) !== FALSE) {
+            // Increment the line number
+            if (++$line > $range['end'])
+                    break;
+
+            if ($line >= $range['start']) {
+                // Make the row safe for output
+
+                if ($line === $line_number) {
+                        // Apply highlighting to this row
+						$row = '# '.sprintf($format, $line).' '.$row;
+                        $row = "[ERROR] ".$row;
+                } else {
+					$row = '        # '.sprintf($format, $line).' '.$row;
+				}
+
+                // Add to the captured source
+                $source .= $row;
+            }
+        }
+
+        // Close the file
+        fclose($file);
+
+        return $source;
+    }
+	
     public static function debugSource($file, $line_number, $padding = 5) {
         
         if ( ! $file OR ! is_readable($file)) {
@@ -263,7 +308,7 @@ class STExceptionHandler extends STObject {
                 ob_start();
                 // Unique error identifier
                 $error_id = uniqid('error');
-                
+                if (!STRequest::isAjax()):
                 ?>
                 <style type="text/css">
                 #sonata_error { background: #ddd; font-size: 1em; font-family:sans-serif; text-align: left; color: #111; }
@@ -387,6 +432,10 @@ class STExceptionHandler extends STObject {
                                 <?php endforeach ?>
                         </div>
                 </div>
+				<?php else:
+				echo "Error: ".$type ?> [ <?php echo $code ?> ]: <?php echo $message."\n\n".
+				"File: ".CFDebugPath($file)." on line ".$line."\n\n------------------------------------------------------------------------------\n\n". STExceptionHandler::debugSourcePlain($file, $line) ?>
+				<?php endif; ?>
                 <?php
                 echo ob_get_clean();
 
