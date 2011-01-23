@@ -212,8 +212,12 @@ class STValidate {
 		return (bool) preg_match('/^[\pL\pN\pZ\p{Pc}\p{Pd}\p{Po}]++$/uD', (string) $str);
 	}
 	
-	public static function username($username) {
-		if(!preg_match('/^[a-zA-Z\d.]{5,50}$/i', $username)){
+	public static function username($username, $allowed = ".") {
+		$str = "";
+		for ($i = 0; $i < strlen($allowed); $i++) {
+			$str .= '\\'.$allowed[$i];
+		}
+		if(!preg_match('/^[a-zA-Z\d'.$str.']{5,50}$/i', $username)){
 			return false;
 		} else {
 			return true;

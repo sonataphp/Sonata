@@ -136,12 +136,14 @@ abstract class ORModel implements Countable, Iterator {
                     $var->$k = ($this->_filtersEnabled)?$this->postProcess($k, $value):$value;
                 } else {
                     if ($this->__leftJoin) {
-                        foreach ($this->__leftJoin as $join) {
-                            if (strpos($k, $join[0]->tableName()) !== FALSE) {
-                                $k = str_replace($join[0]->tableName()."___", "", $k);
-                                $param = $this->findAttributeByObject($join[0]);
-                                if ($param) {
-                                    $var->$param->$k = ($this->_filtersEnabled)?$this->postProcess($k, $value):$value;
+                        foreach ($this->__leftJoin as $leftJoin) {
+                            foreach ($leftJoin as $join) {
+                                if (strpos($k, $join[0]->tableName()) !== FALSE) {
+                                    $k = str_replace($join[0]->tableName()."___", "", $k);
+                                    $param = $this->findAttributeByObject($join[0]);
+                                    if ($param) {
+                                        $var->$param->$k = ($this->_filtersEnabled)?$this->postProcess($k, $value):$value;
+                                    }
                                 }
                             }
                         }
@@ -174,7 +176,7 @@ abstract class ORModel implements Countable, Iterator {
     
     public function singleMatch($args) {
         $args = func_get_args();
-        $this->__leftJoin = $args;
+        $this->__leftJoin[] = $args;
     }
     
     public function onDuplicate($array) {
@@ -210,10 +212,20 @@ abstract class ORModel implements Countable, Iterator {
         
         $joins = '';
         if ($this->__leftJoin) {
-            foreach ($this->__leftJoin as $joinParam) {
-                $this->vars = array_merge($this->vars, $this->describeModel($joinParam[0]));
-                $joins.= "\r\nLEFT JOIN ".$joinParam[0]->tableName().
-                         "    ON (".$joinParam[0]->tableName().".`".$joinParam[2]."` = ".$this->tableName().".`".$joinParam[1]."`".")";
+            foreach ($this->__leftJoin as $leftJoins) {
+                foreach ($leftJoins as $joinParam) {
+                    $this->vars = array_merge($this->vars, $this->describeModel($joinParam[0]));
+                    if (is_array($joinParam[1])) {
+                        $on = array();
+                        foreach ($joinParam[1] as $condition) {
+                            $on[] = $joinParam[0]->tableName().".`".$condition[1]."` = ".$this->tableName().".`".$condition[0]."`";
+                        }
+                        $on = implode(" AND ", $on);
+                    } else
+                        $on = $joinParam[0]->tableName().".`".$joinParam[2]."` = ".$this->tableName().".`".$joinParam[1]."`";
+                    $joins.= "\r\nLEFT JOIN ".$joinParam[0]->tableName().
+                             "    ON (".$on.")";
+                }
             }
         }
         
