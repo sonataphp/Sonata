@@ -77,7 +77,7 @@ class STCookie extends STObject {
 			}
 
 			// The cookie signature is invalid, delete it
-			STCookie::delete($key);
+			STCookie::deleteCookie($key);
 		}
 
 		return $default;
