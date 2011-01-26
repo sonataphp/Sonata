@@ -95,8 +95,23 @@ class UIApplication extends STObject {
 		return $this->isSSL;
 	}
 	
+	public function recreateGetValues() {
+		if (!$_GET) return '';
+		$result = '';
+		foreach ($_GET as $key => $param) {
+			$result[] = $key."=".$param;
+		}
+		return implode("&", $result);
+	}
+	
 	public function forceUsingSSL() {
 		$this->isSSL = true;
+		$location = UIApplicationLocation();
+		if (!$_SERVER['HTTPS']) {
+			$get = $this->recreateGetValues();
+			if ($get) $get = "?".$get;
+			UIApplicationSetLocation(UIApplicationSetSSLProtocol(UIApplicationLocation()).$get);
+		}
 	}
 	
 	public function sendHeader($header) {
@@ -207,6 +222,10 @@ function UIApplicationSetLocation($location = '') {
 
 function UIApplicationRefreshLocation() {
 	UIApplicationSetLocation(UIApplicationLocation());
+}
+
+function UIApplcationSecureLocation($location) {
+    UIApplicationSetLocation(UIApplicationSetSSLProtocol(UIApplicationLocation().$location));
 }
 
 ?>
