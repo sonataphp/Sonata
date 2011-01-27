@@ -224,7 +224,7 @@ function UIApplicationRefreshLocation() {
 	UIApplicationSetLocation(UIApplicationLocation());
 }
 
-function UIApplcationSecureLocation($location) {
+function UIApplicationSecureLocation($location) {
     UIApplicationSetLocation(UIApplicationSetSSLProtocol(UIApplicationUrl().$location));
 }
 
