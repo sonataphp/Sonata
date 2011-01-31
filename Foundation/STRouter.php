@@ -91,6 +91,7 @@ class STRouter extends STObject {
 	public static function mapSecure($rule, $target=array(), $conditions=array()) {
 		$conditions["__secure"] = true;
 		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);
+		return self::$routes[$rule];
 	}
 	
 	public static function defaultRoutes() {
