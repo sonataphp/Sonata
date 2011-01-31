@@ -191,7 +191,7 @@ class DBMySQLDriver extends STObject {
 		$sql = str_replace("{calc}", "SQL_CALC_FOUND_ROWS", $sql);
 		
 		if ($internalCacheResults)
-			if ($this->_cache[md5($sql)])
+			if (isset($this->_cache[md5($sql)]))
 				return $this->_cache[md5($sql)];
 		
 		$_query_id = $this->query($sql);
@@ -217,13 +217,13 @@ class DBMySQLDriver extends STObject {
 	 */
 	public function selectFirst($sql, $internalCacheResults = true) {
 		if ($internalCacheResults)
-			if (isset($this->_cache[md5(trim($sql))]))
-				return $this->_cache[md5(trim($sql))];
+			if (isset($this->_cache[md5($sql)]))
+				return $this->_cache[md5($sql)];
 		
 		$query_id = $this->query($sql);
 		$out = $this->fetchArray($query_id);
 		$this->freeResult($query_id);
-		$this->_cache[md5(trim($sql))] = $out;
+		$this->_cache[md5($sql)] = $out;
 		return $out;
 	}
 	
@@ -239,7 +239,7 @@ class DBMySQLDriver extends STObject {
 	 */
 	public function getVar($sql, $id = 0, $internalCacheResults = true) {
 		if ($internalCacheResults)
-			if ($this->_cache[md5($sql)])
+			if (isset($this->_cache[md5($sql)]))
 				return $this->_cache[md5($sql)];
 		
 		$query_id = $this->query($sql);

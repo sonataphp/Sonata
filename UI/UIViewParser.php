@@ -34,6 +34,28 @@ class UIViewParser {
         return $result;
     }
     
+    private static function generateLink($info) {
+        $info = explode("[", $info);
+        $controllerAction = $info[0];
+        if (strpos($info[1], "]") != NULL)
+            $params = explode(",", substr($info[1], 0, strlen($info[1])-1));
+        if (!$params) {
+            $link = linkTo($controllerAction);
+            $link = str_replace("{{url}}", UIApplicationUrl(), $link);
+            $link = str_replace("{{url:SSL}}", UIApplicationSetSSLProtocol(UIApplicationUrl()), $link);
+            return $link;
+        }
+        $linkParams = array();
+        foreach ($params as $param) {
+            $param = explode("=", trim($param));
+            $linkParams[trim($param[0])] = trim($param[1]);
+        }
+        $link = linkTo($controllerAction, $linkParams);
+        $link = str_replace("{{url}}", UIApplicationUrl(), $link);
+        $link = str_replace("{{url:SSL}}", UIApplicationSetSSLProtocol(UIApplicationUrl()), $link);
+        return $link;
+    }
+    
     public static function callback($matches) {
         $result = $matches[0];
         switch ($result) {
@@ -59,7 +81,9 @@ class UIViewParser {
                 break;
             
             case "{{location}}":
-                $result = UIApplicationLocation();
+                if (UIApplication::sharedApplication()->isSSL())
+                    $result = UIApplicationSetSSLProtocol(UIApplicationLocation()); else
+                        $result = UIApplicationLocation();
                 break;
             
             case "{{location:SSL}}":
@@ -163,6 +187,10 @@ class UIViewParser {
                 $result = self::filter($result, $params);
             }
         }
+        if (strpos($result, "link:") > 0 ) {
+            preg_match_all("/\{\{[a-z\d_-]{1,}:([a-z\d_>\.\,\s-\=\[\]]{1,})\}\}/i", $result, $ar);
+            $result = self::generateLink($ar[1][0]);
+        }
         return $result;
     }
     
@@ -176,7 +204,7 @@ class UIViewParser {
     
     public static function parse($delegate, $content) {
         self::$delegate = $delegate;
-        $content = preg_replace_callback("/\{\{(?:[a-z0-9\_\:\s\-\/\>]+)\}\}/i",
+        $content = preg_replace_callback("/\{\{(?:[a-z0-9\_.,\=\[\]\:\s\-\/\>]+)\}\}/i",
                                          array('UIViewParser', 'callback'),
                                          $content);
         $content = preg_replace_callback('/<com:([a-z\d\_]{1,})(((?!(\/>|<\/com:([^>]*)>)).)*)(\/>|<\/com:([^>]*)>)/is',

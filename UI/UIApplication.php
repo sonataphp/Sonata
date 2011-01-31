@@ -31,7 +31,8 @@ class UIApplication extends STObject {
     public $settings;
     public $hasErrors = false;
 	private $isSSL = false;
-    
+    private $router;
+	
     final private function __clone() { }
     
     protected function __construct() {
@@ -56,6 +57,14 @@ class UIApplication extends STObject {
     public function getDelegate() {
         return self::$delegate;
     }
+	
+	public function setRouter($router) {
+		$this->router = $router;
+	}
+	
+	public function getRouter() {
+		return $this->router;
+	}
 	
 	private function getLocation() {
 		$v=str_replace("/","", UIApplicationUrl());
@@ -176,6 +185,7 @@ class UIApplication extends STObject {
 	public static function handleRoutesWithRouter($router) {
         $router::execute();
         $controller = $router::controller();
+		UIApplication::sharedApplication()->setRouter($router);
         if (!$controller)
             throw new UIViewControllerException(__("Controller was not specified"));
         $controller = $controller."ViewController";
@@ -183,6 +193,10 @@ class UIApplication extends STObject {
         $action = $router::action()."Action";
         $params = $router::params();
         $c = new $controller();
+		if ($params['__secure']) {
+			UIApplication::sharedApplication()->forceUsingSSL();
+			unset($params['__secure']);
+		}
         $c->params = $params;
 		$c->action = $router::action();
 		$c->controllerName = $router::controller();
@@ -227,5 +241,56 @@ function UIApplicationRefreshLocation() {
 function UIApplicationSecureLocation($location) {
     UIApplicationSetLocation(UIApplicationSetSSLProtocol(UIApplicationUrl().$location));
 }
+
+
+function linkTo($controllerAction, $params = array()) {
+	$maybeAlias = false;
+	if (strpos(".", $controllerAction) == NULL) {
+		$maybeAlias = true;
+	}
+	$controllerAction = explode(".", $controllerAction);
+	$controller = $controllerAction[0];
+	$action = $controllerAction[1];
+	$action = $action ? $action : 'index';
+	$router = UIApplication::sharedApplication()->getRouter();
+	$routes = $router::routes();
+	$totalMatches = 0;
+	foreach ($routes as $path => $route) {
+		$c = $route->target['controller'];
+		$a = $route->target['action'];
+		$a = $a ? $a : 'index';
+		if (($c == $controller && $action == $a) || ($maybeAlias && $route->alias == $controller)) {
+			if ($params) {
+				$matchesCount = 0;
+				foreach ($params as $key => $value) {
+					if (strpos($path, ":".$key) != NULL)
+						$matchesCount++;
+				}
+				if ($matchesCount > $totalMatches) {
+					$totalMatches = $matchesCount;
+					$thePath = $path;
+					$theRoute = $route;
+				}
+			} else {
+				$thePath = $path;
+				$theRoute = $route;
+				break;
+			}
+		}
+	}
+	if (!$thePath) throw new Exception("Can't find matching controller $controller for action $action");
+	if (!$params) {
+		$thePath = substr($thePath, 1, strlen($thePath));
+		$thePath = (($theRoute->params['__secure']) ? "{{url:SSL}}" : "{{url}}").$thePath;
+		return $thePath;
+	}
+	foreach ($params as $key => $value) {
+		$thePath = str_replace(":".$key, html($value), $thePath);
+	}
+	$thePath = substr($thePath, 1, strlen($thePath));
+	$thePath = (($theRoute->params['__secure']) ? "{{url:SSL}}" : "{{url}}").$thePath;
+	return $thePath;
+}
+
 
 ?>

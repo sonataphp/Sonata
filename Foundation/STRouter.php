@@ -84,7 +84,13 @@ class STRouter extends STObject {
 	}
 	
 	public static function map($rule, $target=array(), $conditions=array()) {
-		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);      
+		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);
+		return self::$routes[$rule];
+	}
+	
+	public static function mapSecure($rule, $target=array(), $conditions=array()) {
+		$conditions["__secure"] = true;
+		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);
 	}
 	
 	public static function defaultRoutes() {
@@ -119,11 +125,12 @@ class STRouter extends STObject {
 	}
 }
 
-
 class Route {
 	public $is_matched = false;
 	public $params;
 	public $url;
+	public $target;
+	public $alias;
 	private $conditions;
 	
 	public function __construct($url, $request_uri, $target, $conditions) {
@@ -144,18 +151,29 @@ class Route {
 			foreach($target as $key => $value) $this->params[$key] = $value;
 			$this->is_matched = true;
 		}
+		if ($this->conditions['__secure'])
+			$this->params['__secure'] = true;
+			
+		
+		$this->target = $target;
 		
 		unset($p_names); unset($p_values);
 	}
 	
+	public function alias($alias) {
+		$this->alias = $alias;
+	}
+	
+	
 	public function regex_url($matches) {
 		$key = str_replace(':', '', $matches[0]);
-                if (array_key_exists($key, $this->conditions)) {
-                    return '('.$this->conditions[$key].')';
-                } 
-                else {
-                    return '([a-zA-Z0-9_\+\-%\.]+)';
-                }
+		if (array_key_exists($key, $this->conditions)) {
+			return '('.$this->conditions[$key].')';
+		} 
+		else {
+			return '([a-zA-Z0-9_\+\-%\.]+)';
+		}
 	}
 }
+
 ?>
