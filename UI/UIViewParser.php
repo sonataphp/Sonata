@@ -56,6 +56,11 @@ class UIViewParser {
         return $link;
     }
     
+    public static function links($matches) {
+        $result = self::generateLink($matches[1]);
+        return $result; 
+    }
+    
     public static function callback($matches) {
         $result = $matches[0];
         switch ($result) {
@@ -187,10 +192,6 @@ class UIViewParser {
                 $result = self::filter($result, $params);
             }
         }
-        if (strpos($result, "link:") > 0 ) {
-            preg_match_all("/\{\{[a-z\d_-]{1,}:([a-z\d_>\.\,\s-\=\[\]]{1,})\}\}/i", $result, $ar);
-            $result = self::generateLink($ar[1][0]);
-        }
         return $result;
     }
     
@@ -204,6 +205,9 @@ class UIViewParser {
     
     public static function parse($delegate, $content) {
         self::$delegate = $delegate;
+        $content = preg_replace_callback("/\%([a-z\d_>\.\,\s-\=\[\]]{1,})%/i",
+                                         array('UIViewParser', 'links'),
+                                         $content);
         $content = preg_replace_callback("/\{\{(?:[a-z0-9\_.,\=\[\]\:\s\-\/\>]+)\}\}/i",
                                          array('UIViewParser', 'callback'),
                                          $content);
