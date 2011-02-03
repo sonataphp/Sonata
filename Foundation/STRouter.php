@@ -39,6 +39,14 @@ class STRouter extends STObject {
 		self::$controller = $controller;
 	}
 	
+	public static function setSubdomain($subdomain) {
+		self::$subdomain = $subdomain;
+	}
+	
+	public static function getSubdomain() {
+		return self::$subdomain;
+	}
+	
 	public static function action() {
 		return self::$action;
 	}
@@ -84,14 +92,18 @@ class STRouter extends STObject {
 	}
 	
 	public static function map($rule, $target=array(), $conditions=array()) {
-		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);
-		return self::$routes[$rule];
+		$subdomain = self::$subdomain;
+		if ($subdomain == '') $subdomain = 'www';
+		self::$routes[$subdomain][$rule] = new Route($rule, self::$request_uri, $target, $conditions);
+		return self::$routes[$subdomain][$rule];
 	}
 	
 	public static function mapSecure($rule, $target=array(), $conditions=array()) {
 		$conditions["__secure"] = true;
-		self::$routes[$rule] = new Route($rule, self::$request_uri, $target, $conditions);
-		return self::$routes[$rule];
+		$subdomain = self::$subdomain;
+		if ($subdomain == '') $subdomain = 'www';
+		self::$routes[$subdomain][$rule] = new Route($rule, self::$request_uri, $target, $conditions);
+		return self::$routes[$subdomain][$rule];
 	}
 	
 	public static function defaultRoutes() {
@@ -118,9 +130,14 @@ class STRouter extends STObject {
 	}
 	
 	public function execute() {
-		foreach(self::$routes as $route)
+		//print_r(self::$routes);
+		//exit();
+		$subdomain = STServer::subdomain();
+		if ($subdomain == '') $subdomain = 'www';
+		if (self::$subdomain == '') self::$subdomain = 'www';
+		foreach(self::$routes[self::$subdomain] as $route)
 			if ($route->is_matched) {
-				self::setRoute($route);
+					self::setRoute($route);
 				break;
 			}
 	}
@@ -132,12 +149,14 @@ class Route {
 	public $url;
 	public $target;
 	public $alias;
+	public $subdomain;
 	private $conditions;
 	
 	public function __construct($url, $request_uri, $target, $conditions) {
 		$this->url = $url;
 		$this->params = array();
 		$this->conditions = $conditions;
+		$this->subdomain = $subdomain;
 		$p_names = array(); $p_values = array();
 		
 		preg_match_all('@:([\w]+)@', $url, $p_names, PREG_PATTERN_ORDER);

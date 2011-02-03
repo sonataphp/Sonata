@@ -40,6 +40,11 @@ class STCookie extends STObject {
 	 * @var  boolean  Only transmit cookies over secure connections
 	 */
 	public static $secure = FALSE;
+	
+	/**
+	 * @var  boolean  Add user agent to salt generation
+	 */
+	public static $validateUserAgent = FALSE;
 
 	/**
 	 * @var  boolean  Only transmit cookies over HTTP, disabling Javascript access
@@ -152,8 +157,11 @@ class STCookie extends STObject {
 	 * @return  string
 	 */
 	public static function salt($name, $value) {
-		// Determine the user agent
-		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower($_SERVER['HTTP_USER_AGENT']) : 'unknown';
+		if (self::$validateUserAgent) {
+				// Determine the user agent
+				$agent = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower($_SERVER['HTTP_USER_AGENT']) : 'unknown';
+				STLog::write($agent);
+		}
 
 		return sha1($agent.$name.$value.STCookie::$salt);
 	}

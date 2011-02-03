@@ -255,7 +255,9 @@ function linkTo($controllerAction, $params = array()) {
 	$router = UIApplication::sharedApplication()->getRouter();
 	$routes = $router::routes();
 	$totalMatches = 0;
-	foreach ($routes as $path => $route) {
+	$subdomain = '';
+	foreach ($routes as $subdomainName => $subdomains)
+	foreach ($subdomains as $path => $route) {
 		$c = $route->target['controller'];
 		$a = $route->target['action'];
 		$a = $a ? $a : 'index';
@@ -270,25 +272,32 @@ function linkTo($controllerAction, $params = array()) {
 					$totalMatches = $matchesCount;
 					$thePath = $path;
 					$theRoute = $route;
+					$subdomain = $subdomainName;
 				}
 			} else {
 				$thePath = $path;
 				$theRoute = $route;
+				$subdomain = $subdomainName;
 				break;
 			}
 		}
 	}
-	if (!$thePath) throw new Exception("Can't find matching controller $controller for action $action");
+	if (!$thePath) throw new Exception("Can't find matching controller '$controller' for action '$action'");
+	$prefix = ($theRoute->params['__secure']) ? "{{url:SSL}}" : "{{url}}";
+	if ($subdomain != '' && $subdomain != 'www') {
+		$prefix = $subdomain.".".STRegistry::get("Base_Domain");
+		if ($theRoute->params['__secure']) $prefix = "https://".$prefix."/"; else $prefix = "http://".$prefix."/";
+	}
 	if (!$params) {
 		$thePath = substr($thePath, 1, strlen($thePath));
-		$thePath = (($theRoute->params['__secure']) ? "{{url:SSL}}" : "{{url}}").$thePath;
+		$thePath = $prefix.$thePath;
 		return $thePath;
 	}
 	foreach ($params as $key => $value) {
 		$thePath = str_replace(":".$key, html($value), $thePath);
 	}
 	$thePath = substr($thePath, 1, strlen($thePath));
-	$thePath = (($theRoute->params['__secure']) ? "{{url:SSL}}" : "{{url}}").$thePath;
+	$thePath = $prefix.$thePath;
 	return $thePath;
 }
 

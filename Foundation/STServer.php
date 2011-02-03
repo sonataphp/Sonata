@@ -40,7 +40,8 @@ class STServer extends STObject {
     }
     
     public static function subdomain() {
-        list($subdomain, $rest) = explode('.', $_SERVER['HTTP_HOST'], 2);
+        $domain = str_replace(".", "\\.", STRegistry::get("Base_Domain"));
+        $subdomain = preg_replace('/^(?:([^\.]+)\.)?'.$domain.'$/', '\1', $_SERVER['SERVER_NAME']);
         return $subdomain;
     }
     
