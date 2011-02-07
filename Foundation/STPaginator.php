@@ -27,6 +27,12 @@ class STPaginator {
                                     "next_text" => "&gt;",
                                     "prev_no_link_text" => "",
                                     "next_no_link_text" => "",
+									"prev_wrapper_class" => "",
+									"next_wrapper_class" => "",
+									"prev_class" => "",
+									"next_class" => "",
+									"current_wrapper_class" => "",
+									"current_class" => "selected",
                                     "dots" => "...",
                                     "is_ajax" => false);
 
@@ -66,7 +72,7 @@ class STPaginator {
             }
             
             if ($cur_page > 1)
-                $result .= '    <'.$options['items_wrapper'].'><a '.$rel_prev_page.' href="' . $link_prev_page . '">'.$options['prev_text'].'</a></'.self::$options['items_wrapper'].'>'."\r\n";
+                $result .= '    <'.$options['items_wrapper'].' class="'.self::$options['prev_wrapper_class'].'"><a class="'.self::$options['prev_class'].'" '.$rel_prev_page.' href="' . $link_prev_page . '">'.$options['prev_text'].'</a></'.self::$options['items_wrapper'].'>'."\r\n";
             else
                 $result .= '    <'.$options['items_wrapper'].' class="nolink">'.$options['prev_no_link_text'].'</'.$options['items_wrapper'].'>'."\r\n";
             foreach ($pages as $page) {
@@ -79,7 +85,7 @@ class STPaginator {
                     $result .= '    <'.$options['items_wrapper'].'><a '.$rel_page.' href="'.$page_url. '">' . $page['text'] . '</a></'.$options['items_wrapper'].'>'."\r\n";
                 } else {
                     if ($page['text'] == $cur_page)
-                        $result .= '    <'.self::$options['items_wrapper'].'><a class="selected" '.$rel_cur_page.' href="'.$link_cur_page . '">' . $page['text'] . '</a></'.$options['items_wrapper'].'>'."\r\n";
+                        $result .= '    <'.self::$options['items_wrapper'].' class="'.self::$options['current_wrapper_class'].'"><a class="'.self::$options['current_class'].'" '.$rel_cur_page.' href="'.$link_cur_page . '">' . $page['text'] . '</a></'.$options['items_wrapper'].'>'."\r\n";
                     else
                         $result .= $page['text'];
                 }
@@ -87,7 +93,7 @@ class STPaginator {
         }
         if ($total_pages > 0) {
             if ($cur_page != $total_pages) {
-                $result .= '    <'.$options['items_wrapper'].'><a '.$rel_next_page.' href="' . $link_next_page . '">'.$options['next_text'].'</a></'.$options['items_wrapper'].'>'."\r\n";
+                $result .= '    <'.$options['items_wrapper'].' class="'.self::$options['next_wrapper_class'].'"><a class="'.self::$options['next_class'].'" '.$rel_next_page.' href="' . $link_next_page . '">'.$options['next_text'].'</a></'.$options['items_wrapper'].'>'."\r\n";
             } elseif ($total_pages > 1)
                 $result .= '    <'.$options['items_wrapper'].' class="nolink">'.$options['next_no_link_text'].'</'.$options['items_wrapper'].'>'."\r\n";
         }
