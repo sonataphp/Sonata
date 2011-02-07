@@ -160,7 +160,6 @@ class STCookie extends STObject {
 		if (self::$validateUserAgent) {
 				// Determine the user agent
 				$agent = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower($_SERVER['HTTP_USER_AGENT']) : 'unknown';
-				STLog::write($agent);
 		}
 
 		return sha1($agent.$name.$value.STCookie::$salt);

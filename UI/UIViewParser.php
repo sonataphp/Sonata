@@ -205,7 +205,7 @@ class UIViewParser {
     
     public static function parse($delegate, $content) {
         self::$delegate = $delegate;
-        $content = preg_replace_callback("/\%([a-z\d_>\.\,\s-\=\[\]]{1,})%/i",
+        $content = preg_replace_callback("/\\\"\%([a-z\d_>\.\,\s-\=\[\]]{1,})\%\\\"/i",
                                          array('UIViewParser', 'links'),
                                          $content);
         $content = preg_replace_callback("/\{\{(?:[a-z0-9\_.,\=\[\]\:\s\-\/\>]+)\}\}/i",
