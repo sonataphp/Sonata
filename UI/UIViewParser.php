@@ -43,7 +43,7 @@ class UIViewParser {
             $link = linkTo($controllerAction);
             $link = str_replace("{{url}}", UIApplicationUrl(), $link);
             $link = str_replace("{{url:SSL}}", UIApplicationSetSSLProtocol(UIApplicationUrl()), $link);
-            return $link;
+            return '"'.$link.'"';
         }
         $linkParams = array();
         foreach ($params as $param) {
