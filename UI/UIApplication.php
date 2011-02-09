@@ -283,7 +283,7 @@ function linkTo($controllerAction, $params = array()) {
 		}
 	}
 	if (!$thePath) throw new Exception("Can't find matching controller '$controller' for action '$action'");
-	$prefix = ($theRoute->params['__secure']) ? "{{url:SSL}}" : "{{url}}";
+	$prefix = ($theRoute->params['__secure']) ? UIApplicationSetSSLProtocol(UIApplicationUrl()) : UIApplicationUrl();
 	if ($subdomain != '' && $subdomain != 'www') {
 		$prefix = $subdomain.".".STRegistry::get("Base_Domain");
 		if ($theRoute->params['__secure']) $prefix = "https://".$prefix."/"; else $prefix = "http://".$prefix."/";
