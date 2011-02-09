@@ -41,8 +41,6 @@ class UIViewParser {
             $params = explode(",", substr($info[1], 0, strlen($info[1])-1));
         if (!$params) {
             $link = linkTo($controllerAction);
-            $link = str_replace("{{url}}", UIApplicationUrl(), $link);
-            $link = str_replace("{{url:SSL}}", UIApplicationSetSSLProtocol(UIApplicationUrl()), $link);
             return '"'.$link.'"';
         }
         $linkParams = array();
@@ -51,8 +49,6 @@ class UIViewParser {
             $linkParams[trim($param[0])] = trim($param[1]);
         }
         $link = linkTo($controllerAction, $linkParams);
-        $link = str_replace("{{url}}", UIApplicationUrl(), $link);
-        $link = str_replace("{{url:SSL}}", UIApplicationSetSSLProtocol(UIApplicationUrl()), $link);
         return '"'.$link.'"';
     }
     
