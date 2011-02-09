@@ -30,7 +30,7 @@ abstract class UIComponent extends UIViewController {
         $this->content = $content;
         $xml = simplexml_load_string($content);
         foreach ($xml->attributes() as $key => $attribute) {
-            $this->$key = $attribute;
+            $this->$key = strval($attribute);
         }
     }
     
