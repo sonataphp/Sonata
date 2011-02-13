@@ -242,15 +242,19 @@ class STExceptionHandler extends STObject {
     
     public static function exceptionHandler(Exception $e) {
 		if (CFDebugErrors != 'YES') {
-				if ( ! headers_sent()) {
-					STNotificationCenter::postNotification("STStandardException", "standardException", array("error" => $error, "code" => $code, "file" => $file, "line" => $line));
-					// Make sure the proper content type is sent with a 500 status
-					header('Content-Type: text/html; charset=utf-8', TRUE, 500);
-					echo '<h1>Internal Server Error</h1>';
-					die(1);
-				} else {
-					return;
-				}
+			if ($e->getCode() >= 400 && $e->getCode() < 600) {
+				header('Content-Type: text/html; charset=utf-8', TRUE, 404);
+				die(1);
+			}
+			if ( ! headers_sent()) {
+				STNotificationCenter::postNotification("STStandardException", "standardException", array("error" => $error, "code" => $code, "file" => $file, "line" => $line));
+				// Make sure the proper content type is sent with a 500 status
+				header('Content-Type: text/html; charset=utf-8', TRUE, 500);
+				echo '<h1>Internal Server Error</h1>';
+				die(1);
+			} else {
+				return;
+			}
 		}
         try
             {
