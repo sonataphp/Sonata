@@ -241,14 +241,17 @@ class STExceptionHandler extends STObject {
     }
     
     public static function exceptionHandler(Exception $e) {
-	if (!((!self::$isProduction) && (CFDebugErrors == 'YES'))) {
+		
+	if (CFDebugErrors != 'YES') {
             if ( ! headers_sent()) {
-		    STNotificationCenter::postNotification("STStandardException", "standardException", array("error" => $error, "code" => $code, "file" => $file, "line" => $line));
-                    // Make sure the proper content type is sent with a 500 status
-                    header('Content-Type: text/html; charset=utf-8', TRUE, 500);
-                    echo '<h1>Internal Server Error</h1>';
-                    exit(1);
-            }
+				STNotificationCenter::postNotification("STStandardException", "standardException", array("error" => $error, "code" => $code, "file" => $file, "line" => $line));
+                // Make sure the proper content type is sent with a 500 status
+                header('Content-Type: text/html; charset=utf-8', TRUE, 500);
+                echo '<h1>Internal Server Error</h1>';
+                die(1);
+            } else {
+				return;
+			}
         }
         try
             {
@@ -450,12 +453,12 @@ class STExceptionHandler extends STObject {
                 echo STExceptionHandler::exceptionText($e), "\n";
 
                 // Exit with an error status
-                exit(1);
+                die(1);
             }
     }
     
     public static function dump($value, $length = 128) {
-	return STExceptionHandler::_dump($value, $length);
+		return STExceptionHandler::_dump($value, $length);
     }
     
     protected static function _dump( & $var, $length = 128, $level = 0) {
@@ -627,29 +630,29 @@ class STExceptionHandler extends STObject {
     public static function errorHandler($code, $error, $file = NULL, $line = NULL) {
         if (in_array($code, self::$errors)) return TRUE;
        
-        if ((!self::$isProduction) && (CFDebugErrors == 'YES')) {
+        if (CFDebugErrors == 'YES') {
 			STNotificationCenter::postNotification("STStandardException", "standardException", array("error" => $error, "code" => $code, "file" => $file, "line" => $line));
             STExceptionHandler::exceptionHandler(new ErrorException($error, $code, 0, $file, $line));
-            exit(1);
+            die(1);
         } else {
             if ( ! headers_sent()) {
 				    STNotificationCenter::postNotification("STStandardException", "standardException", array("error" => $error, "code" => $code, "file" => $file, "line" => $line));
                     // Make sure the proper content type is sent with a 500 status
                     header('Content-Type: text/html; charset=utf-8', TRUE, 500);
                     echo '<h1>Internal Server Error</h1>';
-                    exit(1);
+                    die(1);
             }
         }
     }
     
     public static function shutdownHandler() {
-        if ((!self::$isProduction) && (CFDebugErrors == 'YES')) {
+        if (CFDebugErrors == 'YES') {
             if ($error = error_get_last() AND in_array($error['type'], STExceptionHandler::$shutdownErrors)) {
 				ob_get_level();
 				ob_clean();
                 STExceptionHandler::exceptionHandler(new STFatalException($error['message'], $error['type'], 0, $error['file'], $error['line']));
 				STNotificationCenter::postNotification("STCriticalException", "criticalException", $error);
-                exit(1);
+                die(1);
             }
         } else {
             if ( ! headers_sent()) {
@@ -660,7 +663,7 @@ class STExceptionHandler extends STObject {
 					// Make sure the proper content type is sent with a 500 status
 					header('Content-Type: text/html; charset=utf-8', TRUE, 500);
 					echo '<h1>Internal Server Error</h1>';
-					exit(1);
+					die(1);
 				}    
             }
         }

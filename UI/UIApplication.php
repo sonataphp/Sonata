@@ -193,7 +193,7 @@ class UIApplication extends STObject {
         $action = $router::action()."Action";
         $params = $router::params();
         $c = new $controller();
-		if ($params['__secure']) {
+		if (isset($params['__secure'])) {
 			UIApplication::sharedApplication()->forceUsingSSL();
 			unset($params['__secure']);
 		}

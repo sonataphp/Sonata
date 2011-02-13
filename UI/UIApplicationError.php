@@ -27,7 +27,7 @@ class UIApplicationError extends Exception {
         
         if ($errorMessage) $errorMessage = '<br/><br/><b>'.$errorMessage.'</b>';
         
-        parent::__construct("UIApplicationError: ".$errorCode.", delegateTo: ".$delegate.", action: ".$action.$errorMessage, $code);
+        parent::__construct("UIApplicationError: ".$errorCode.", delegateTo: ".$delegate.", action: ".$action.$errorMessage, $errorCode);
 	}
 	
 }

@@ -149,14 +149,12 @@ class Route {
 	public $url;
 	public $target;
 	public $alias;
-	public $subdomain;
 	private $conditions;
 	
 	public function __construct($url, $request_uri, $target, $conditions) {
 		$this->url = $url;
 		$this->params = array();
 		$this->conditions = $conditions;
-		$this->subdomain = $subdomain;
 		$p_names = array(); $p_values = array();
 		
 		preg_match_all('@:([\w]+)@', $url, $p_names, PREG_PATTERN_ORDER);
@@ -171,7 +169,7 @@ class Route {
 			foreach($target as $key => $value) $this->params[$key] = $value;
 			$this->is_matched = true;
 		}
-		if ($this->conditions['__secure'])
+		if (isset($this->conditions['__secure']))
 			$this->params['__secure'] = true;
 			
 		
