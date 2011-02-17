@@ -264,7 +264,7 @@ abstract class ORModel implements Countable, Iterator {
                 $reflect = new ReflectionProperty($this, $key);
                 if (!is_object($this->$key))
                 if($reflect->isPublic()) {
-                    if ($this->$key || $this->$key === "") {
+                    if ($this->$key || $this->$key === "" || $this->$key === 0) {
                         $data[$key] = $val;
                     }
                 }
@@ -283,7 +283,7 @@ abstract class ORModel implements Countable, Iterator {
                 $reflect = new ReflectionProperty($this, $key);
                 if (!is_object($this->$key))
                 if($reflect->isPublic()) {
-                    if ($this->$key || $this->$key === "") {
+                    if ($this->$key || $this->$key === "" || $this->$key === 0) {
                         $data[$key] = $val;
                     }
                 }
