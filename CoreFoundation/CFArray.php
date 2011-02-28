@@ -33,10 +33,22 @@ class CFArray {
 		$object = new $class();
 		if (count($array) > 0) {
 		   foreach ($array as $name=>$value) {
-			  $name = str_replace(" ", "_", $name);
 			  if (!empty($name)) {
-					if (is_array($value)) $value = self::arrayToObject($value);
+				$name = str_replace(" ", "_", $name);
+					if (is_array($value)) {
+						$value = self::arrayToObject($value);
+					}
+					if ($name > 0) {
+						if (!is_array($object))
+							$object = array();
+						$object[$name] = $value;
+					} else
 					$object->$name = $value;
+			  } else {
+				$name = 0;
+				if (!is_array($object))
+					$object = array();
+				$object[$name] = $value;
 			  }
 		   }
 		}
