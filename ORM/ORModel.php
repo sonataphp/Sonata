@@ -62,6 +62,7 @@ abstract class ORModel implements Countable, Iterator {
     private $__onduplicate;
     private $__leftJoin;
     private $_filtersEnabled = true;
+    private $__alias;
     
     protected function postProcess($fieldName, $value) {
         return $value;
@@ -99,6 +100,23 @@ abstract class ORModel implements Countable, Iterator {
         return $_vars;
     }
     
+    private function describeJoiningModel($model, $tableName) {
+        if (!$vars = get_object_vars($model)) return;
+        $_vars = array();
+        foreach ($vars as $key => $val) {
+            if ($key == '_settings') continue;
+            /* Get a reflection object for the object instance var */
+            try {
+                $reflect = new ReflectionProperty($model, $key);
+                if (!is_object($model->$key))
+                if($reflect->isPublic()) {
+                    $_vars[] = $tableName.'.`'.$key.'` as '.$tableName."___".$key;
+                }
+            } catch (Exception $e) { }
+        }
+        return $_vars;
+    }
+    
     private function prepareQueryParams($params) {
         $params = ((count($params) == 1) && (is_array($params[0])))?$params[0]:$params;
         $q = array_shift($params);
@@ -108,7 +126,7 @@ abstract class ORModel implements Countable, Iterator {
         return $q;
     }
     
-    private function findAttributeByObject($object) {
+    private function findAttributeByObject($object, $name) {
         if (!$vars = get_object_vars($this)) return;
         $class = get_class($object);
         foreach ($vars as $key => $val) {
@@ -118,7 +136,7 @@ abstract class ORModel implements Countable, Iterator {
                 $reflect = new ReflectionProperty($this, $key);
                 if (is_object($this->$key))
                 if($reflect->isPublic()) {
-                    if ($this->$key instanceof $class) {
+                    if ($this->$key instanceof $class && $this->$key->getAlias() == $name) {
                         return $key;
                     }
                 }
@@ -138,9 +156,9 @@ abstract class ORModel implements Countable, Iterator {
                     if ($this->__leftJoin) {
                         foreach ($this->__leftJoin as $leftJoin) {
                             foreach ($leftJoin as $join) {
-                                if (strpos($k, $join[0]->tableName()) !== FALSE) {
-                                    $k = str_replace($join[0]->tableName()."___", "", $k);
-                                    $param = $this->findAttributeByObject($join[0]);
+                                if (strpos($k, $join[1]) !== FALSE) {
+                                    $k = str_replace($join[1]."___", "", $k);
+                                    $param = $this->findAttributeByObject($join[0], $join[1]);
                                     if ($param) {
                                         $var->$param->$k = ($this->_filtersEnabled)?$this->postProcess($k, $value):$value;
                                     }
@@ -156,6 +174,16 @@ abstract class ORModel implements Countable, Iterator {
     
     public function __construct() {
         $this->position = 0;
+        $this->__alias = $this->tableName;
+    }
+    
+    public function setAlias($alias) {
+        $this->__alias = $alias;
+    }
+    
+    public function getAlias() {
+        if (!$this->__alias) $this->__alias = $this->tableName().rand();
+        return $this->__alias;
     }
 
     public function primaryKey() {
@@ -214,16 +242,17 @@ abstract class ORModel implements Countable, Iterator {
         if ($this->__leftJoin) {
             foreach ($this->__leftJoin as $leftJoins) {
                 foreach ($leftJoins as $joinParam) {
-                    $this->vars = array_merge($this->vars, $this->describeModel($joinParam[0]));
+                    $this->vars = array_merge($this->vars, $this->describeJoiningModel($joinParam[0], $joinParam[1]));
                     if (is_array($joinParam[1])) {
                         $on = array();
                         foreach ($joinParam[1] as $condition) {
-                            $on[] = $joinParam[0]->tableName().".`".$condition[1]."` = ".$this->tableName().".`".$condition[0]."`";
+                            $on[] = $joinParam[1].".`".$condition[1]."` = ".$this->tableName().".`".$condition[0]."`";
                         }
                         $on = implode(" AND ", $on);
                     } else
-                        $on = $joinParam[0]->tableName().".`".$joinParam[2]."` = ".$this->tableName().".`".$joinParam[1]."`";
-                    $joins.= "\r\nLEFT JOIN ".$joinParam[0]->tableName().
+                        $on = $joinParam[1].".`".$joinParam[2]."` = ".$this->tableName().".`".$joinParam[1]."`";
+                    $joinParam[0]->setAlias($joinParam[1]);
+                    $joins.= "\r\nLEFT JOIN ".$joinParam[0]->tableName()." ".$joinParam[1].
                              "    ON (".$on.")";
                 }
             }
