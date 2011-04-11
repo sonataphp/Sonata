@@ -116,7 +116,7 @@ class UIApplication extends STObject {
 	public function forceUsingSSL() {
 		$this->isSSL = true;
 		$location = UIApplicationLocation();
-		if (!$_SERVER['HTTPS']) {
+		if ($_SERVER['SERVER_PORT'] != 443) {
 			$get = $this->recreateGetValues();
 			if ($get) $get = "?".$get;
 			UIApplicationSetLocation(UIApplicationSetSSLProtocol(UIApplicationLocation()).$get);

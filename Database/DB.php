@@ -33,7 +33,6 @@ class DB extends STObject {
     public static function useDriver($driver) {
         $driver = "DB".$driver.'Driver';
         self::$driver = new $driver();
-        return $this;
     }
     
     public static function defaultConnectionFromObject($object) {
