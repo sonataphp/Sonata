@@ -174,7 +174,7 @@ abstract class ORModel implements Countable, Iterator {
     
     public function __construct() {
         $this->position = 0;
-        $this->__alias = $this->tableName;
+        $this->__alias = $this->_tableName;
     }
     
     public function setAlias($alias) {

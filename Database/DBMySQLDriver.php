@@ -142,7 +142,7 @@ class DBMySQLDriver extends STObject {
 	 *  @param   mixed $query_id  Query ID  
 	 */
     private function freeResult($query_id = -1) {
-		if ($query_id != -1) $this->_query_id = $query_id;
+		if (!is_int($query_id)) $this->_query_id = $query_id;
 		$this->_query_id->free_result();
     }
 	
@@ -153,7 +153,7 @@ class DBMySQLDriver extends STObject {
 	 * 	@return  array Array of results
 	 */
 	private function fetchArray($query_id =- 1) {
-		if ($query_id!=-1) $this->_query_id = $query_id;
+		if (!is_int($query_id)) $this->_query_id = $query_id;
 		if (isset($this->_query_id)) $record = $this->_query_id->fetch_assoc(); else
 			throw new STDatabaseException("Invalid query_id: <b>{$this->_query_id}</b>. Records could not be fetched.");
 		if ($record) $record = array_map("stripslashes", $record);
