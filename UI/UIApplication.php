@@ -301,5 +301,22 @@ function linkTo($controllerAction, $params = array()) {
 	return $thePath;
 }
 
+// New go method, for fast redirect
+
+function go($where = null, $params = array(), $getParams = '') {
+	if ($where === null) {
+		UIApplicationRefreshLocation();
+	}
+	UIApplicationSetLocation(linkTo($where, $params).$getParams);
+}
+
+class go {
+	
+	static function __callStatic($name, $arguments) {
+		go($name, is_array($arguments[0]) ? $arguments[0] : array(),
+		          isset($arguments[1]) ? $arguments[1] : "");
+	}
+	
+}
 
 ?>

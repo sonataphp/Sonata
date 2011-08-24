@@ -24,7 +24,7 @@ define ("STMailFormatPlain", "text/plain");
 class STMail {
 	private $to, $from, $replyto, $mailedby, $returnpath;
 	private $subject;
-	private $format = STEmailFormatHtml;
+	private $format = STMailFormatHtml;
 	private $charset = 'utf-8';
 	private $buffer;
 	private $body;

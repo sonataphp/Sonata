@@ -157,6 +157,11 @@ class Route {
 		$this->conditions = $conditions;
 		$p_names = array(); $p_values = array();
 		
+		if (is_string($target)) {
+			$t = explode("#", $target);
+			$target = array('controller' => $t[0], 'action' => $t[1] ? $t[1] : 'index');
+		}
+		
 		preg_match_all('@:([\w]+)@', $url, $p_names, PREG_PATTERN_ORDER);
 		$p_names = $p_names[0];
 		

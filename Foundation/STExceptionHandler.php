@@ -314,7 +314,7 @@ class STExceptionHandler extends STObject {
                 ob_start();
                 // Unique error identifier
                 $error_id = uniqid('error');
-                if (!STRequest::isAjax()):
+                if (!STRequest::isAjax() && !STRegistry::get("__error_output_plain")):
                 ?>
                 <style type="text/css">
                 #sonata_error { background: #ddd; font-size: 1em; font-family:sans-serif; text-align: left; color: #111; }
